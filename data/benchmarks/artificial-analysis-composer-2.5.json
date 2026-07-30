@@ -1,0 +1,35 @@
+{
+  "source": "Artificial Analysis",
+  "url": "https://artificialanalysis.ai/articles/cursor-composer-2-5-coding-agent-index",
+  "snapshot_date": "2026-05-21",
+  "last_manual_refresh": "2026-05-31",
+  "composer": {
+    "model": "Composer 2.5",
+    "coding_agent_index": 62.0,
+    "standard_cost_usd": 0.07,
+    "fast_cost_usd": 0.44,
+    "standard_minutes": 9.3,
+    "fast_minutes": 6.7,
+    "standard_token_pricing_usd_per_million": {
+      "input": 0.5,
+      "output": 2.5
+    },
+    "fast_token_pricing_usd_per_million": {
+      "input": 3.0,
+      "output": 15.0
+    }
+  },
+  "peer_rows": [
+    {
+      "model": "GPT-5.5 XHigh",
+      "score": 65.0,
+      "cost_usd": 4.82,
+      "deepswe_model": "gpt-5-5",
+      "deepswe_reasoning_effort": "xhigh"
+    }
+  ],
+  "notes": [
+    "Article also cites medium-effort peers at roughly $1.24-$2.21 per task.",
+    "Only rows with exact peer cost and score are used as DeepSWE mapping anchors."
+  ]
+}

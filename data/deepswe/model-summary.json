@@ -1,0 +1,1002 @@
+[
+  {
+    "model": "claude-fable-5",
+    "reasoning_effort": "high",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 430,
+    "pass_rate": 0.686046511627907,
+    "avg_cost_usd": 9.177638214788733,
+    "avg_duration_seconds": 1094.3122603119468,
+    "avg_agent_duration_seconds": 1011.2764046504425,
+    "avg_input_tokens": 4597935.170353983,
+    "avg_output_tokens": 54498.761061946905,
+    "avg_peak_context_tokens": 107897.97887323944,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-fable-5",
+    "reasoning_effort": "low",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 433,
+    "pass_rate": 0.5958429561200924,
+    "avg_cost_usd": 3.757873125874126,
+    "avg_duration_seconds": 693.8485673628319,
+    "avg_agent_duration_seconds": 608.5787738429204,
+    "avg_input_tokens": 1620158.0663716814,
+    "avg_output_tokens": 24181.741150442478,
+    "avg_peak_context_tokens": 52521.58508158508,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-fable-5",
+    "reasoning_effort": "max",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 436,
+    "pass_rate": 0.6972477064220184,
+    "avg_cost_usd": 21.634702092592594,
+    "avg_duration_seconds": 2104.9666549800886,
+    "avg_agent_duration_seconds": 2018.455254,
+    "avg_input_tokens": 12191439.838495575,
+    "avg_output_tokens": 114394.79867256636,
+    "avg_peak_context_tokens": 204934.97685185185,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-fable-5",
+    "reasoning_effort": "medium",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 436,
+    "pass_rate": 0.6536697247706422,
+    "avg_cost_usd": 6.158014692840646,
+    "avg_duration_seconds": 886.5275905066372,
+    "avg_agent_duration_seconds": 804.5466830929204,
+    "avg_input_tokens": 2903324.615044248,
+    "avg_output_tokens": 38900.30088495575,
+    "avg_peak_context_tokens": 78446.63048498845,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-fable-5",
+    "reasoning_effort": "xhigh",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.6991150442477876,
+    "avg_cost_usd": 13.414521495535714,
+    "avg_duration_seconds": 1520.2034757278761,
+    "avg_agent_duration_seconds": 1411.5830643938054,
+    "avg_input_tokens": 7329160.601769911,
+    "avg_output_tokens": 80352.1703539823,
+    "avg_peak_context_tokens": 147261.15625,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-4-8",
+    "reasoning_effort": "high",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5176991150442478,
+    "avg_cost_usd": 4.281940017699115,
+    "avg_duration_seconds": 1153.2599510929203,
+    "avg_agent_duration_seconds": 1066.903783732301,
+    "avg_input_tokens": 4908687.0265486725,
+    "avg_output_tokens": 50063.52654867257,
+    "avg_peak_context_tokens": 99540.53097345133,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-4-8",
+    "reasoning_effort": "low",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.4079822616407982,
+    "avg_cost_usd": 2.2902922610619467,
+    "avg_duration_seconds": 738.5336481438054,
+    "avg_agent_duration_seconds": 651.1627087455753,
+    "avg_input_tokens": 2413782.349557522,
+    "avg_output_tokens": 28896.524336283186,
+    "avg_peak_context_tokens": 62917.1703539823,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-4-8",
+    "reasoning_effort": "max",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 429,
+    "pass_rate": 0.5897435897435898,
+    "avg_cost_usd": 12.576522386061946,
+    "avg_duration_seconds": 3745.1057260663715,
+    "avg_agent_duration_seconds": 3661.21118775,
+    "avg_input_tokens": 16198409.453539822,
+    "avg_output_tokens": 128475.97787610619,
+    "avg_peak_context_tokens": 221823.44690265486,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-4-8",
+    "reasoning_effort": "medium",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.48672566371681414,
+    "avg_cost_usd": 3.4438571028761062,
+    "avg_duration_seconds": 964.6769296504424,
+    "avg_agent_duration_seconds": 880.0083837986726,
+    "avg_input_tokens": 3843602.6681415928,
+    "avg_output_tokens": 41313.45132743363,
+    "avg_peak_context_tokens": 85026.13938053098,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-4-8",
+    "reasoning_effort": "xhigh",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 447,
+    "pass_rate": 0.5436241610738255,
+    "avg_cost_usd": 7.922955080752212,
+    "avg_duration_seconds": 2366.872083643805,
+    "avg_agent_duration_seconds": 2259.9773800973453,
+    "avg_input_tokens": 9748844.513274336,
+    "avg_output_tokens": 85203.74115044248,
+    "avg_peak_context_tokens": 160477.41814159293,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-5",
+    "reasoning_effort": "high",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 449,
+    "pass_rate": 0.7282850779510023,
+    "avg_cost_usd": 6.092345711836283,
+    "avg_duration_seconds": 1269.9353338030974,
+    "avg_agent_duration_seconds": 1164.4534170154868,
+    "avg_input_tokens": 7257843.676991151,
+    "avg_output_tokens": 64290.43584070796,
+    "avg_peak_context_tokens": 134566.21017699115,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-5",
+    "reasoning_effort": "low",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 449,
+    "pass_rate": 0.5812917594654788,
+    "avg_cost_usd": 1.674116430862832,
+    "avg_duration_seconds": 581.3932271526548,
+    "avg_agent_duration_seconds": 469.2772807035398,
+    "avg_input_tokens": 1577112.4933628319,
+    "avg_output_tokens": 20004.150442477876,
+    "avg_peak_context_tokens": 52622.97123893805,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-5",
+    "reasoning_effort": "max",
+    "provider": "vertex_ai",
+    "n_trials": 449,
+    "n_non_error": 444,
+    "pass_rate": 0.7364864864864865,
+    "avg_cost_usd": 11.844077419821827,
+    "avg_duration_seconds": 2038.89173623608,
+    "avg_agent_duration_seconds": 1911.7595934342985,
+    "avg_input_tokens": 15023304.04454343,
+    "avg_output_tokens": 117746.99109131403,
+    "avg_peak_context_tokens": 222820.39198218263,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-5",
+    "reasoning_effort": "medium",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 447,
+    "pass_rate": 0.6890380313199105,
+    "avg_cost_usd": 3.3086427632743365,
+    "avg_duration_seconds": 879.5738982367258,
+    "avg_agent_duration_seconds": 759.2629332853983,
+    "avg_input_tokens": 3605315.030973451,
+    "avg_output_tokens": 37127.86725663717,
+    "avg_peak_context_tokens": 85722.92699115044,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-opus-5",
+    "reasoning_effort": "xhigh",
+    "provider": "vertex_ai",
+    "n_trials": 451,
+    "n_non_error": 447,
+    "pass_rate": 0.7315436241610739,
+    "avg_cost_usd": 9.095453687915743,
+    "avg_duration_seconds": 1683.2499983968958,
+    "avg_agent_duration_seconds": 1560.465749600887,
+    "avg_input_tokens": 11324589.407982262,
+    "avg_output_tokens": 91886.35254988914,
+    "avg_peak_context_tokens": 181831.64966740576,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "reasoning_effort": "high",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.29933481152993346,
+    "avg_cost_usd": 5.511358256415929,
+    "avg_duration_seconds": 2929.246400915929,
+    "avg_agent_duration_seconds": 2822.4933025707965,
+    "avg_input_tokens": 12843690.60619469,
+    "avg_output_tokens": 76021.2942477876,
+    "avg_peak_context_tokens": 151636.21017699115,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-sonnet-5",
+    "reasoning_effort": "high",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.4823008849557522,
+    "avg_cost_usd": 7.425560161197339,
+    "avg_duration_seconds": 1858.130521227876,
+    "avg_agent_duration_seconds": 1728.2193087920355,
+    "avg_input_tokens": 18254491.34368071,
+    "avg_output_tokens": 87294.75609756098,
+    "avg_peak_context_tokens": 186353.16186252772,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-sonnet-5",
+    "reasoning_effort": "low",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 449,
+    "pass_rate": 0.3051224944320713,
+    "avg_cost_usd": 2.1891933331858406,
+    "avg_duration_seconds": 887.9825605884955,
+    "avg_agent_duration_seconds": 738.7135301194689,
+    "avg_input_tokens": 4543330.283185841,
+    "avg_output_tokens": 35582.49778761062,
+    "avg_peak_context_tokens": 84804.59734513274,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-sonnet-5",
+    "reasoning_effort": "max",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 442,
+    "pass_rate": 0.5384615384615384,
+    "avg_cost_usd": 25.83550945586283,
+    "avg_duration_seconds": 4993.628337289822,
+    "avg_agent_duration_seconds": 4869.159938278762,
+    "avg_input_tokens": 70840927.97787611,
+    "avg_output_tokens": 209825.15044247787,
+    "avg_peak_context_tokens": 415290.94911504426,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-sonnet-5",
+    "reasoning_effort": "medium",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 450,
+    "pass_rate": 0.3977777777777778,
+    "avg_cost_usd": 4.0736751205752215,
+    "avg_duration_seconds": 1256.3238465884956,
+    "avg_agent_duration_seconds": 1121.441886880531,
+    "avg_input_tokens": 9275060.163716814,
+    "avg_output_tokens": 56734.04646017699,
+    "avg_peak_context_tokens": 127458.59292035399,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "claude-sonnet-5",
+    "reasoning_effort": "xhigh",
+    "provider": "anthropic",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.49667405764966743,
+    "avg_cost_usd": 11.901739484402654,
+    "avg_duration_seconds": 2553.5457005442477,
+    "avg_agent_duration_seconds": 2415.3723237168138,
+    "avg_input_tokens": 30723443.473451328,
+    "avg_output_tokens": 120820.23008849558,
+    "avg_peak_context_tokens": 253576.04424778762,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gemini-3-1-pro-preview",
+    "reasoning_effort": "high",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.11751662971175167,
+    "avg_cost_usd": 9.462695374778761,
+    "avg_duration_seconds": 2304.095879838496,
+    "avg_agent_duration_seconds": 2211.3330311371683,
+    "avg_input_tokens": 6557523.9734513275,
+    "avg_output_tokens": 196109.68584070797,
+    "avg_peak_context_tokens": 274948.44911504426,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gemini-3-5-flash",
+    "reasoning_effort": "medium",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.37389380530973454,
+    "avg_cost_usd": 7.341823985508849,
+    "avg_duration_seconds": 1697.8915013938054,
+    "avg_agent_duration_seconds": 1591.2357384845131,
+    "avg_input_tokens": 17106307.721238937,
+    "avg_output_tokens": 275777.50884955755,
+    "avg_peak_context_tokens": 496377.56415929203,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gemini-3-6-flash",
+    "reasoning_effort": "high",
+    "provider": "vertex_ai",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.48558758314855877,
+    "avg_cost_usd": 3.540522760287611,
+    "avg_duration_seconds": 1358.8912107610618,
+    "avg_agent_duration_seconds": 1281.4721818783187,
+    "avg_input_tokens": 12622012.754424779,
+    "avg_output_tokens": 97174.19026548673,
+    "avg_peak_context_tokens": 184255.796460177,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "glm-5-2",
+    "reasoning_effort": "high",
+    "provider": "zai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.36283185840707965,
+    "avg_cost_usd": 2.8355164725663715,
+    "avg_duration_seconds": 1905.7714263362832,
+    "avg_agent_duration_seconds": 1794.4733617809734,
+    "avg_input_tokens": 9070605.707964601,
+    "avg_output_tokens": 54245.50442477876,
+    "avg_peak_context_tokens": 108969.13938053098,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "glm-5-2",
+    "reasoning_effort": "max",
+    "provider": "zai",
+    "n_trials": 452,
+    "n_non_error": 450,
+    "pass_rate": 0.43777777777777777,
+    "avg_cost_usd": 3.9089401533628316,
+    "avg_duration_seconds": 2741.3833920774337,
+    "avg_agent_duration_seconds": 2624.0967806615045,
+    "avg_input_tokens": 12567296.807522124,
+    "avg_output_tokens": 78128.28539823009,
+    "avg_peak_context_tokens": 144776.39380530972,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-4",
+    "reasoning_effort": "xhigh",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5176991150442478,
+    "avg_cost_usd": 5.6524577245575225,
+    "avg_duration_seconds": 1474.258333141593,
+    "avg_agent_duration_seconds": 1368.707164818584,
+    "avg_input_tokens": 9418920.763274336,
+    "avg_output_tokens": 71408.87389380531,
+    "avg_peak_context_tokens": 186701.14159292035,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-5",
+    "reasoning_effort": "high",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.6438053097345132,
+    "avg_cost_usd": 5.100437004424779,
+    "avg_duration_seconds": 2124.0858500951326,
+    "avg_agent_duration_seconds": 2048.0589126172567,
+    "avg_input_tokens": 4617781.876106195,
+    "avg_output_tokens": 31159.49778761062,
+    "avg_peak_context_tokens": 112672.96017699115,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-5",
+    "reasoning_effort": "low",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.26991150442477874,
+    "avg_cost_usd": 1.2002025442477877,
+    "avg_duration_seconds": 649.0984658451328,
+    "avg_agent_duration_seconds": 569.9958436615044,
+    "avg_input_tokens": 776751.5840707965,
+    "avg_output_tokens": 9442.774336283186,
+    "avg_peak_context_tokens": 41879.323008849555,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-5",
+    "reasoning_effort": "medium",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5398230088495575,
+    "avg_cost_usd": 2.749342734513274,
+    "avg_duration_seconds": 1364.8381008053098,
+    "avg_agent_duration_seconds": 1288.995063800885,
+    "avg_input_tokens": 2438539.053097345,
+    "avg_output_tokens": 19625.433628318584,
+    "avg_peak_context_tokens": 80151.4889380531,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-5",
+    "reasoning_effort": "xhigh",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.6703539823008849,
+    "avg_cost_usd": 7.226236674778761,
+    "avg_duration_seconds": 1916.7825569292033,
+    "avg_agent_duration_seconds": 1806.3251869889382,
+    "avg_input_tokens": 8372927.630530974,
+    "avg_output_tokens": 46294.72345132743,
+    "avg_peak_context_tokens": 151162.8384955752,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-luna",
+    "reasoning_effort": "high",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.4424778761061947,
+    "avg_cost_usd": 0.7779007499999999,
+    "avg_duration_seconds": 573.7954217234513,
+    "avg_agent_duration_seconds": 473.83880740929203,
+    "avg_input_tokens": 3372477.7876106193,
+    "avg_output_tokens": 25778.274336283186,
+    "avg_peak_context_tokens": 96774.43362831858,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-luna",
+    "reasoning_effort": "low",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.015486725663716814,
+    "avg_cost_usd": 0.07240623938053097,
+    "avg_duration_seconds": 172.85839214159293,
+    "avg_agent_duration_seconds": 77.14656007522123,
+    "avg_input_tokens": 150031.52876106196,
+    "avg_output_tokens": 3127.754424778761,
+    "avg_peak_context_tokens": 17456.285398230088,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-luna",
+    "reasoning_effort": "max",
+    "provider": "openai",
+    "n_trials": 448,
+    "n_non_error": 448,
+    "pass_rate": 0.671875,
+    "avg_cost_usd": 3.028116810267857,
+    "avg_duration_seconds": 1229.863693234375,
+    "avg_agent_duration_seconds": 1122.9470243995536,
+    "avg_input_tokens": 15443718.330357144,
+    "avg_output_tokens": 73399.70758928571,
+    "avg_peak_context_tokens": 214840.11830357142,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-luna",
+    "reasoning_effort": "medium",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.11283185840707964,
+    "avg_cost_usd": 0.21630978982300886,
+    "avg_duration_seconds": 280.2944485044248,
+    "avg_agent_duration_seconds": 181.5252541438053,
+    "avg_input_tokens": 617827.4800884955,
+    "avg_output_tokens": 8179.570796460177,
+    "avg_peak_context_tokens": 36685.39159292035,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-luna",
+    "reasoning_effort": "xhigh",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5685840707964602,
+    "avg_cost_usd": 1.5356192685840708,
+    "avg_duration_seconds": 834.9757124646018,
+    "avg_agent_duration_seconds": 731.6846703871681,
+    "avg_input_tokens": 7610577.53539823,
+    "avg_output_tokens": 44677.900442477876,
+    "avg_peak_context_tokens": 149002.97123893804,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-sol",
+    "reasoning_effort": "high",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.6940133037694013,
+    "avg_cost_usd": 3.467349738938053,
+    "avg_duration_seconds": 704.1775743960177,
+    "avg_agent_duration_seconds": 593.8525424159293,
+    "avg_input_tokens": 2709878.8805309734,
+    "avg_output_tokens": 28457.349557522124,
+    "avg_peak_context_tokens": 105516.43584070797,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-sol",
+    "reasoning_effort": "low",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.45353982300884954,
+    "avg_cost_usd": 1.0742664646017699,
+    "avg_duration_seconds": 359.7476426858407,
+    "avg_agent_duration_seconds": 262.2510164579646,
+    "avg_input_tokens": 690833.657079646,
+    "avg_output_tokens": 10579.141592920354,
+    "avg_peak_context_tokens": 43628.13716814159,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-sol",
+    "reasoning_effort": "max",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 450,
+    "pass_rate": 0.7266666666666667,
+    "avg_cost_usd": 8.370030946902654,
+    "avg_duration_seconds": 1244.9319600553097,
+    "avg_agent_duration_seconds": 1127.4708863097346,
+    "avg_input_tokens": 7886423.860619469,
+    "avg_output_tokens": 60029.32522123894,
+    "avg_peak_context_tokens": 186781.5353982301,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-sol",
+    "reasoning_effort": "medium",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.6106194690265486,
+    "avg_cost_usd": 1.8620318075221238,
+    "avg_duration_seconds": 523.290915829646,
+    "avg_agent_duration_seconds": 423.3752944181416,
+    "avg_input_tokens": 1505793.9557522123,
+    "avg_output_tokens": 18425.216814159292,
+    "avg_peak_context_tokens": 70478.24336283185,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-sol",
+    "reasoning_effort": "xhigh",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.7073170731707317,
+    "avg_cost_usd": 4.707564325221239,
+    "avg_duration_seconds": 909.006394550885,
+    "avg_agent_duration_seconds": 800.9833530730089,
+    "avg_input_tokens": 4264781.798672566,
+    "avg_output_tokens": 40771.402654867255,
+    "avg_peak_context_tokens": 140632.1017699115,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-terra",
+    "reasoning_effort": "high",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5376106194690266,
+    "avg_cost_usd": 1.1343762765486725,
+    "avg_duration_seconds": 470.90157124336287,
+    "avg_agent_duration_seconds": 364.2859819269911,
+    "avg_input_tokens": 1557052.774336283,
+    "avg_output_tokens": 21517.03982300885,
+    "avg_peak_context_tokens": 72877.00442477876,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-terra",
+    "reasoning_effort": "low",
+    "provider": "openai",
+    "n_trials": 449,
+    "n_non_error": 449,
+    "pass_rate": 0.24053452115812918,
+    "avg_cost_usd": 0.4277452605790646,
+    "avg_duration_seconds": 279.30419627839643,
+    "avg_agent_duration_seconds": 176.52513473942093,
+    "avg_input_tokens": 480565.34521158127,
+    "avg_output_tokens": 8572.26280623608,
+    "avg_peak_context_tokens": 34782.64142538975,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-terra",
+    "reasoning_effort": "max",
+    "provider": "openai",
+    "n_trials": 451,
+    "n_non_error": 451,
+    "pass_rate": 0.6962305986696231,
+    "avg_cost_usd": 4.945847263858093,
+    "avg_duration_seconds": 1121.7465077760532,
+    "avg_agent_duration_seconds": 1016.6698429312638,
+    "avg_input_tokens": 9230560.541019956,
+    "avg_output_tokens": 71938.62527716186,
+    "avg_peak_context_tokens": 187930.0465631929,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-terra",
+    "reasoning_effort": "medium",
+    "provider": "openai",
+    "n_trials": 450,
+    "n_non_error": 450,
+    "pass_rate": 0.3511111111111111,
+    "avg_cost_usd": 0.5832493688888889,
+    "avg_duration_seconds": 336.2330369666667,
+    "avg_agent_duration_seconds": 229.60274282444442,
+    "avg_input_tokens": 725100.8355555555,
+    "avg_output_tokens": 11746.56,
+    "avg_peak_context_tokens": 45705.8,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "gpt-5-6-terra",
+    "reasoning_effort": "xhigh",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.6017699115044248,
+    "avg_cost_usd": 2.127191725663717,
+    "avg_duration_seconds": 687.6051595420354,
+    "avg_agent_duration_seconds": 584.0832282876107,
+    "avg_input_tokens": 3246355.4668141594,
+    "avg_output_tokens": 39616.53982300885,
+    "avg_peak_context_tokens": 115417.26769911505,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "grok-4-5",
+    "reasoning_effort": "high",
+    "provider": "xai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5376106194690266,
+    "avg_cost_usd": 2.4157481725663716,
+    "avg_duration_seconds": 591.2764853141592,
+    "avg_agent_duration_seconds": 484.7029359800885,
+    "avg_input_tokens": 4059182.975663717,
+    "avg_output_tokens": 35525.33185840708,
+    "avg_peak_context_tokens": 98415.80088495575,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "kimi-k2-7-code",
+    "reasoning_effort": null,
+    "provider": "openrouter",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.3053097345132743,
+    "avg_cost_usd": 2.815536243274336,
+    "avg_duration_seconds": 2231.379740471239,
+    "avg_agent_duration_seconds": 2163.7950712809734,
+    "avg_input_tokens": 13008041.482300885,
+    "avg_output_tokens": 59297.24778761062,
+    "avg_peak_context_tokens": 132673.68584070797,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "kimi-k3",
+    "reasoning_effort": "max",
+    "provider": "moonshot",
+    "n_trials": 452,
+    "n_non_error": 451,
+    "pass_rate": 0.6851441241685144,
+    "avg_cost_usd": 4.651599979646018,
+    "avg_duration_seconds": 4656.862627112832,
+    "avg_agent_duration_seconds": 4539.09233250885,
+    "avg_input_tokens": 9686833.181415929,
+    "avg_output_tokens": 81497.3982300885,
+    "avg_peak_context_tokens": 139512.23008849556,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  },
+  {
+    "model": "muse-spark-1-1",
+    "reasoning_effort": "xhigh",
+    "provider": "openai",
+    "n_trials": 452,
+    "n_non_error": 452,
+    "pass_rate": 0.5331858407079646,
+    "avg_cost_usd": 2.361142644469026,
+    "avg_duration_seconds": 971.7504023517698,
+    "avg_agent_duration_seconds": 897.5133296747788,
+    "avg_input_tokens": 12005399.261061948,
+    "avg_output_tokens": 74008.4203539823,
+    "avg_peak_context_tokens": 169154.1017699115,
+    "source": "deep-swe",
+    "source_artifacts": {
+      "trials": "https://deepswe.datacurve.ai/artifacts/v1.1/trials.json",
+      "tasks": "https://deepswe.datacurve.ai/artifacts/v1.1/tasks.json",
+      "release": "https://deepswe.datacurve.ai/artifacts/v1.1/release.json"
+    }
+  }
+]

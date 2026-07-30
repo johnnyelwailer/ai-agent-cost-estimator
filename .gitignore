@@ -1,0 +1,7 @@
+work/
+outputs/
+dist/
+data/deepswe/trials.json
+data/deepswe/tasks.json
+.DS_Store
+.claude/

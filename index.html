@@ -1,0 +1,1602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Agent Cost Estimator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --bg-top: #e8eefc;
+      --ink: #0f172a;
+      --ink-soft: #1e293b;
+      --muted: #64748b;
+      --faint: #94a3b8;
+      --soft: #eef2f8;
+      --soft-2: #f5f8fc;
+      --line: #e5eaf2;
+      --line-strong: #d4dce8;
+      --panel: #ffffff;
+      --accent: #2563eb;
+      --accent-ink: #1d4ed8;
+      --accent-soft: #eef4ff;
+      --green: #059669;
+      --green-soft: #ecfdf5;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --red: #dc2626;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,.05), 0 1px 1px rgba(15,23,42,.04);
+      --shadow-md: 0 8px 24px rgba(15,23,42,.06), 0 2px 6px rgba(15,23,42,.05);
+      --shadow-lg: 0 28px 64px rgba(15,23,42,.10), 0 10px 24px rgba(15,23,42,.06);
+      --r-lg: 18px;
+      --r-md: 13px;
+      --r-sm: 10px;
+      --maxw: 1320px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 520px at 78% -160px, rgba(37,99,235,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg-top) 0, var(--bg) 460px);
+      background-attachment: fixed;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1, "cv01" 1; }
+    header, main { max-width: var(--maxw); margin: 0 auto; }
+    header { padding: 46px 28px 20px; }
+    main { padding: 0 28px 56px; }
+    h1 {
+      margin: 14px 0 14px;
+      font-size: clamp(34px, 4.6vw, 60px);
+      line-height: 1.02;
+      letter-spacing: -.025em;
+      font-weight: 900;
+      background: linear-gradient(120deg, #0f172a 0%, #233a72 52%, #2563eb 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    h2 { margin: 0; font-size: 18px; line-height: 1.25; letter-spacing: -.015em; font-weight: 800; color: var(--ink); }
+    h3 { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: -.01em; }
+    p { margin: 0; color: var(--muted); line-height: 1.55; }
+    button, input, select { font: inherit; }
+    .eyebrow {
+      display: inline-flex; gap: 9px; align-items: center;
+      color: #2b3a5e; font-size: 12.5px; font-weight: 700; letter-spacing: .01em;
+      background: rgba(255,255,255,.8); backdrop-filter: blur(8px);
+      border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px 7px 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(37,99,235,.15); }
+    .lead { max-width: 760px; font-size: 17.5px; line-height: 1.55; color: #475569; }
+
+    .layout { display: grid; grid-template-columns: 344px minmax(0, 1fr); gap: 22px; align-items: start; margin-top: 26px; }
+    .layout > section { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-md);
+      padding: 22px;
+    }
+    .panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    .panel-sub { margin-top: 4px; font-size: 13px; color: var(--muted); }
+    .title-row { display: inline-flex; align-items: center; gap: 8px; }
+
+    /* ----- Controls ----- */
+    .controls { position: sticky; top: 18px; padding: 20px 22px 18px; max-height: calc(100vh - 36px); overflow-y: auto; overscroll-behavior: contain; }
+    .controls::-webkit-scrollbar { width: 10px; }
+    .controls::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; border: 3px solid var(--panel); }
+    .controls::-webkit-scrollbar-track { background: transparent; }
+    .controls-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .icon-btn { flex: none; width: 34px; height: 34px; border: 1px solid var(--line); background: #fff; border-radius: 9px; display: grid; place-items: center; cursor: pointer; color: var(--muted); line-height: 1; transition: color .12s, border-color .12s, background .12s; }
+    .icon-btn:hover { color: var(--ink); border-color: var(--line-strong); background: var(--soft-2); }
+    .icon-btn svg { width: 17px; height: 17px; display: block; }
+    .show-params { display: none; justify-self: start; align-items: center; gap: 9px; padding: 11px 17px; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; box-shadow: var(--shadow-md); font-weight: 700; font-size: 13.5px; color: var(--ink); cursor: pointer; transition: border-color .12s, box-shadow .12s; }
+    .show-params:hover { border-color: var(--line-strong); box-shadow: var(--shadow-lg); }
+    .show-params .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(37,99,235,.15); }
+    .layout.collapsed { grid-template-columns: 1fr; }
+    .layout.collapsed > .controls { display: none; }
+    .layout.collapsed .show-params { display: inline-flex; }
+    .controls > h2 { letter-spacing: -.01em; }
+    .controls > p { margin-top: 4px; font-size: 13px; }
+    .control-row { display: grid; grid-template-columns: 1fr 78px; gap: 11px; align-items: end; margin-top: 16px; }
+    .control-row label { display: block; color: #334155; font-size: 12.5px; font-weight: 700; margin-bottom: 7px; letter-spacing: -.005em; }
+    .control-row label span { font-variant-numeric: tabular-nums; }
+    .label-row { display: inline-flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .hint-badge {
+      display: inline-grid; place-items: center; width: 18px; height: 18px;
+      border: 1px solid var(--line-strong); border-radius: 999px; background: #fff;
+      color: var(--muted); font-size: 11px; font-weight: 800; line-height: 1; cursor: help;
+      box-shadow: var(--shadow-sm); user-select: none;
+    }
+    .hint-badge:hover { color: var(--accent-ink); border-color: var(--accent); }
+    .control-row input, .control-row select {
+      width: 100%; border: 1px solid var(--line-strong); background: #fff; color: var(--ink);
+      border-radius: var(--r-sm); padding: 10px 11px; font-weight: 600; font-variant-numeric: tabular-nums;
+      transition: border-color .12s ease, box-shadow .12s ease;
+    }
+    .control-row input:focus, .control-row select:focus, .toolbar input:focus, .toolbar select:focus, .chart-tools select:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3.5px rgba(37,99,235,.16);
+    }
+    .control-row input[type="range"] {
+      padding: 0; height: 26px; background: transparent; border: 0; accent-color: var(--accent); cursor: pointer;
+    }
+    .unit {
+      display: grid; place-items: center; height: 42px; border: 1px solid var(--line);
+      border-radius: var(--r-sm); background: var(--soft); color: #475569; font-weight: 700; font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+    .seg {
+      display: inline-flex; gap: 4px; padding: 4px; margin-top: 16px;
+      background: var(--soft); border: 1px solid var(--line); border-radius: 12px;
+    }
+    .seg.full { display: flex; }
+    .seg.full button { flex: 1; }
+    .seg button {
+      border: 0; background: transparent; border-radius: 9px; padding: 9px 14px;
+      color: var(--muted); font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap;
+      transition: background .14s ease, color .14s ease, box-shadow .14s ease;
+    }
+    .seg button:hover { color: var(--ink-soft); }
+    .seg button.active { background: #fff; color: var(--accent-ink); box-shadow: var(--shadow-sm); }
+    .seg-field { margin-top: 16px; }
+    .seg-field > label { display: block; color: #334155; font-size: 12.5px; font-weight: 700; margin-bottom: 7px; }
+    .seg-field .seg { margin-top: 0; width: 100%; }
+    .fx-action { position: relative; margin-top: 9px; display: flex; justify-content: flex-end; }
+    .fx-toggle { border: 0; background: transparent; color: var(--muted); font-size: 11.5px; font-weight: 750; padding: 4px 0; cursor: pointer; }
+    .fx-toggle:hover, .fx-toggle[aria-expanded="true"] { color: var(--accent-ink); }
+    .fx-flyout { position: absolute; z-index: 5; top: 30px; right: 0; width: 232px; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: #fff; box-shadow: var(--shadow-lg); }
+    .fx-flyout label { display: block; color: #334155; font-size: 11.5px; font-weight: 700; margin-bottom: 6px; }
+    .fx-flyout input { width: 100%; border: 1px solid var(--line-strong); border-radius: 8px; padding: 8px 9px; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .fx-flyout input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.14); }
+    .control-divider { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+    [hidden] { display: none !important; }
+    .cap-status { margin: 8px 0 0; color: var(--muted); font-size: 11.5px; font-weight: 600; line-height: 1.4; }
+    .cap-status.warn { color: var(--red); }
+    .cap-control { margin-top: 12px; }
+    .cap-control > label { display: block; color: #334155; font-size: 12.5px; font-weight: 700; margin-bottom: 7px; letter-spacing: -.005em; }
+    .cap-value-row { display: grid; grid-template-columns: 1fr 78px; gap: 11px; align-items: end; }
+    .cap-value-row input { width: 100%; border: 1px solid var(--line-strong); background: #fff; color: var(--ink); border-radius: var(--r-sm); padding: 10px 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .cap-value-row input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3.5px rgba(37,99,235,.16); }
+    .cap-slider { width: 100%; height: 26px; margin: 4px 0 0; accent-color: var(--accent); cursor: pointer; }
+    .control-row input:disabled { opacity: .5; background: var(--soft); cursor: not-allowed; }
+    .check-row {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .check-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #334155;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: -.005em;
+      cursor: pointer;
+    }
+    .check-row input { margin: 0; accent-color: var(--accent); }
+    .retry-field { margin-top: 16px; }
+    .retry-field > label { display: block; color: #334155; font-size: 12.5px; font-weight: 700; margin-bottom: 7px; letter-spacing: -.005em; }
+    .retry-control { display: grid; grid-template-columns: minmax(0, 1fr) 86px; gap: 11px; align-items: center; }
+    .retry-control input { width: 100%; height: 26px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+    .retry-display { height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--soft); color: #475569; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .retry-note { margin: 6px 0 0; color: var(--muted); font-size: 11.5px; line-height: 1.4; }
+    .switch-input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .check-row label { width: 100%; justify-content: space-between; }
+    .switch-track { position: relative; flex: 0 0 38px; width: 38px; height: 22px; border-radius: 999px; background: #cbd5e1; transition: background .15s ease; }
+    .switch-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(15,23,42,.24); transition: transform .15s ease; }
+    .switch-input:checked + .switch-track { background: var(--accent); }
+    .switch-input:checked + .switch-track::after { transform: translateX(16px); }
+    .switch-input:focus-visible + .switch-track { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .hint { margin-top: 14px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+    .formula { display: grid; gap: 9px; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--line-strong); }
+    .formula div {
+      border: 1px solid var(--line); background: var(--soft-2); border-radius: var(--r-sm); padding: 11px 12px;
+      font-weight: 700; font-size: 13px; color: var(--ink-soft);
+    }
+    .formula span { display: block; color: var(--muted); font-weight: 500; font-size: 11.5px; margin-top: 4px; line-height: 1.45; }
+
+    /* ----- Metric cards ----- */
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .metric {
+      position: relative; padding: 18px 18px 17px; border: 1px solid var(--line); border-radius: var(--r-md);
+      background: linear-gradient(180deg, #fff, #fbfcfe); box-shadow: var(--shadow-sm); overflow: hidden;
+    }
+    .metric::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--accent); opacity: .9; }
+    .metric.good::before { background: var(--green); }
+    .metric.alt::before { background: #7c8aa3; }
+    .metric .label { color: var(--faint); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; }
+    .metric .value { font-size: clamp(24px, 2.5vw, 32px); font-weight: 800; margin-top: 8px; line-height: 1.04; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .metric .sub { margin-top: 8px; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+
+    /* ----- Charts ----- */
+    .chart { width: 100%; height: auto; display: block; overflow: visible; }
+    .chart-tools { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin-bottom: 14px; }
+    .range-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; }
+    .range-tools .seg { width: 100%; min-width: 0; }
+    .range-tools .seg button { flex: 1 1 0; padding-inline: 9px; }
+    .range-tools .tool-group { gap: 0; }
+    .range-tools .tool-group label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .range-tools #rangeCount { width: 82px; }
+    .range-tools #rangeSort { width: 142px; }
+    .chart-tools .tool-group { display: inline-flex; align-items: center; gap: 9px; }
+    .chart-tools label { color: var(--faint); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    .chart-tools select { border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 8px 11px; background: #fff; color: var(--ink); font-weight: 600; min-height: 38px; }
+    .chart-tools .seg { margin-top: 0; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .pill {
+      display: inline-flex; gap: 7px; align-items: center; padding: 6px 11px; border-radius: 999px;
+      background: var(--soft-2); border: 1px solid var(--line); color: #475569; font-size: 12px; font-weight: 700;
+    }
+    .legend-pill { cursor: pointer; user-select: none; transition: opacity .12s ease, background .12s ease; }
+    .legend-pill:hover { background: #fff; }
+    .legend-pill.off { opacity: .4; text-decoration: line-through; background: #fff; }
+    .legend-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+    .tip-target { cursor: help; }
+    .chart-tooltip {
+      position: fixed; z-index: 100; max-width: 330px; pointer-events: none; opacity: 0;
+      transform: translate(-50%, -108%); transition: opacity .1s ease;
+      background: #0b1220; color: #f1f5f9; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; box-shadow: 0 18px 48px rgba(0,0,0,.32);
+      padding: 12px 14px; font-size: 12px; line-height: 1.5; white-space: pre-line;
+      font-variant-numeric: tabular-nums;
+    }
+    .chart-tooltip strong { display: block; font-size: 13px; margin-bottom: 5px; color: #fff; letter-spacing: -.01em; }
+    .chart-tooltip p { margin: 0; color: #dbe5f1; }
+    .chart-tooltip pre {
+      margin: 8px 0 0; padding: 10px 11px; border-radius: 10px;
+      background: rgba(148,163,184,.14); border: 1px solid rgba(148,163,184,.18);
+      color: #f8fafc; white-space: pre-wrap; overflow-wrap: anywhere;
+      font: 11.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .chart-tooltip code { font: inherit; color: inherit; }
+
+    /* ----- Toolbar / table ----- */
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .toolbar .left, .toolbar .right { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .toolbar input, .toolbar select { border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 9px 11px; background: #fff; min-height: 40px; font-weight: 600; }
+    .toolbar input[type="search"] { min-width: 190px; }
+    .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: var(--r-md); background: #fff; }
+    table { width: 100%; border-collapse: collapse; min-width: 980px; font-variant-numeric: tabular-nums; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid var(--soft); text-align: right; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: 0; }
+    th {
+      color: var(--muted); background: var(--soft-2); font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .05em; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 2;
+    }
+    th:hover { color: var(--accent-ink); }
+    td:first-child, th:first-child { text-align: left; position: sticky; left: 0; z-index: 1; }
+    th:first-child { z-index: 3; }
+    td:first-child { background: #fff; }
+    tr:hover td { background: var(--soft-2); }
+    tr:hover td:first-child { background: var(--soft-2); }
+    .name { font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
+    .source { color: var(--faint); font-size: 11.5px; margin-top: 2px; font-weight: 600; }
+    .barbg { height: 9px; width: 132px; background: var(--soft); border-radius: 999px; overflow: hidden; display: inline-block; vertical-align: middle; border: 1px solid var(--line); }
+    .bar { height: 100%; min-width: 3px; border-radius: inherit; display: block; }
+
+    .mobile-list { display: none; gap: 12px; }
+    .model-card { border: 1px solid var(--line); border-radius: var(--r-md); padding: 15px; background: #fff; box-shadow: var(--shadow-sm); }
+    .model-card .top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .model-card .price { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+    .model-card .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 14px; }
+    .mini { background: var(--soft-2); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 9px 10px; }
+    .mini span { display: block; color: var(--faint); font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .mini strong { display: block; margin-top: 3px; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+
+    /* ----- Callouts ----- */
+    .callouts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .callout {
+      position: relative; border: 1px solid #dbe6fb; background: linear-gradient(180deg, #f5f9ff, #eef4ff);
+      padding: 16px 17px 16px 19px; border-radius: var(--r-md); color: #1e3a8a; line-height: 1.5; font-size: 13.5px;
+    }
+    .callout::before { content: ""; position: absolute; inset: 12px auto 12px 0; width: 4px; border-radius: 999px; background: var(--accent); }
+    .callout strong { color: inherit; font-weight: 800; }
+    .callout.warn { border-color: #fae9c8; background: linear-gradient(180deg, #fffdf6, #fffaeb); color: #92500a; }
+    .callout.warn::before { background: var(--amber); }
+    .callout.good { border-color: #c5ecd9; background: linear-gradient(180deg, #f4fdf9, #ecfdf5); color: #065f46; }
+    .callout.good::before { background: var(--green); }
+
+    .prose { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .prose strong { color: var(--ink-soft); font-weight: 700; }
+
+    footer { color: var(--muted); font-size: 13px; line-height: 1.7; padding-top: 4px; }
+    footer a { color: var(--accent-ink); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+    a { color: var(--accent-ink); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+      .controls { position: static; max-height: none; overflow: visible; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .callouts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      header { padding: 32px 16px 14px; }
+      main { padding: 0 16px 40px; }
+      .cards { grid-template-columns: 1fr; }
+      .control-row { grid-template-columns: 1fr 70px; }
+      .table-wrap { display: none; }
+      .mobile-list { display: grid; }
+      .toolbar { align-items: stretch; }
+      .toolbar .left, .toolbar .right, .toolbar input, .toolbar select { width: 100%; }
+      .model-card .meta { grid-template-columns: 1fr 1fr; }
+      .panel { padding: 16px; }
+      .chart-tools { gap: 12px; }
+      .chart-tools .seg { width: 100%; flex-wrap: wrap; }
+      .chart-tools .seg button { flex: 1 1 40%; padding: 9px 8px; }
+      .range-tools { grid-template-columns: 1fr 1fr; }
+      .range-tools .seg { grid-column: 1 / -1; }
+      .range-tools #rangeCount, .range-tools #rangeSort { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="eyebrow"><span class="dot"></span> Cost model · CHF · 31 May 2026</span>
+    <h1>AI Agent Cost Estimator</h1>
+    <p class="lead">API-equivalent cost for a monthly schedule or fixed agent-hour budget. Change workload, FX, and retry penalty &mdash; then compare throughput spend against baseline-output-normalized spend.</p>
+  </header>
+
+  <main>
+    <div class="layout">
+      <aside class="panel controls">
+        <div class="controls-head">
+          <div class="title-row"><h2>Parameters</h2><span class="hint-badge tip-target" id="paramFormulaTip">?</span></div>
+          <button id="collapseBtn" type="button" class="icon-btn" aria-label="Hide parameters" title="Hide parameters">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg>
+          </button>
+        </div>
+        <p>Play here. Numbers update live.</p>
+
+        <div class="seg-field">
+          <label><span class="label-row">Workload basis<span class="hint-badge tip-target" data-tip="<strong>Workload basis</strong><p><strong>Monthly</strong> derives total agent-hours from workdays, daily hours, lanes, and utilization. <strong>Total hours</strong> estimates one fixed task or project budget directly.</p>">?</span></span></label>
+          <div class="seg full" id="workloadMode" role="group" aria-label="workload basis">
+            <button type="button" data-mode="monthly" class="active">Monthly</button>
+            <button type="button" data-mode="total">Total hours</button>
+          </div>
+        </div>
+        <div id="monthlyWorkloadControls">
+        <div class="control-row">
+          <div>
+            <label for="days"><span class="label-row">Workdays / month<span class="hint-badge tip-target" data-tip="<strong>Workdays / month</strong><p>Sets the monthly time budget before any model math runs. Affects tasks/month, raw monthly spend, baseline monthly spend, and mixes.</p>">?</span></span></label>
+            <input id="days" type="number" min="1" max="31" step="0.25" value="21.75" />
+          </div>
+          <div class="unit">days</div>
+        </div>
+        <div class="control-row">
+          <div>
+            <label for="hours"><span class="label-row">Hours / day<span class="hint-badge tip-target" data-tip="<strong>Hours / day</strong><p>Sets daily working time. Affects throughput, monthly raw spend, baseline monthly spend, and recommended mixes.</p>">?</span></span></label>
+            <input id="hours" type="number" min="1" max="24" step="0.5" value="8" />
+          </div>
+          <div class="unit">h</div>
+        </div>
+        <div class="control-row">
+          <div>
+            <label for="parallel"><span class="label-row">Parallel agent lanes: <span id="parallelLabel">1</span>&times;<span class="hint-badge tip-target" data-tip="<strong>Parallel agent lanes</strong><p>How many tasks can run at once. Higher values increase throughput and monthly spend, but do not change per-task model quality.</p>">?</span></span></label>
+            <input id="parallel" type="range" min="1" max="8" step="1" value="1" />
+          </div>
+          <div class="unit" id="parallelUnit">1&times;</div>
+        </div>
+        <div class="control-row">
+          <div>
+            <label for="util"><span class="label-row">Agent utilization: <span id="utilLabel">100</span>%<span class="hint-badge tip-target" data-tip="<strong>Agent utilization</strong><p>How fully the available lanes stay busy. Lower values reduce throughput and monthly spend across every chart and list.</p>">?</span></span></label>
+            <input id="util" type="range" min="10" max="100" step="5" value="100" />
+          </div>
+          <div class="unit" id="utilUnit">100%</div>
+        </div>
+        </div>
+        <div id="totalWorkloadControls" hidden>
+          <div class="control-row">
+            <div>
+              <label for="totalHours"><span class="label-row">Total agent-hours<span class="hint-badge tip-target" data-tip="<strong>Total agent-hours</strong><p>Fixed AI work budget for one task or project. This is aggregate agent time, so do not multiply it by parallel lanes again.</p>">?</span></span></label>
+              <input id="totalHours" type="number" min="0.25" max="100000" step="0.25" value="20" />
+            </div>
+            <div class="unit">h</div>
+          </div>
+        </div>
+        <div class="seg-field control-divider">
+          <label><span class="label-row">Display currency<span class="hint-badge tip-target" data-tip="<strong>Display currency</strong><p>Switches displayed money values between CHF and USD. It affects labels, table values, chart axes, and tooltips.</p>">?</span></span></label>
+          <div class="seg full" id="currencySeg" role="group" aria-label="display currency">
+            <button type="button" data-cur="CHF" class="active">CHF</button>
+            <button type="button" data-cur="USD">USD</button>
+          </div>
+          <div class="fx-action">
+            <button id="fxToggle" class="fx-toggle" type="button" aria-expanded="false" aria-controls="fxFlyout">FX</button>
+            <div id="fxFlyout" class="fx-flyout" hidden>
+              <label for="fx">USD &rarr; CHF rate</label>
+              <input id="fx" type="number" min="0.1" max="2" step="0.0001" value="0.7875" />
+            </div>
+          </div>
+        </div>
+        <div id="maxCostControl" class="cap-control control-divider">
+          <label for="maxCost"><span class="label-row">Maximum total cost<span class="hint-badge tip-target" data-tip="<strong>Maximum total cost</strong><p>Hard filter on the model's retry-adjusted spend for the selected workload. It starts at the highest model cost, so all models are included until you lower it.</p>">?</span></span></label>
+          <div class="cap-value-row">
+            <input id="maxCost" type="number" min="0" step="1" value="100" />
+            <div class="unit" id="maxCostUnit">CHF</div>
+          </div>
+          <input id="maxCostSlider" class="cap-slider" type="range" min="0" max="1000" step="10" value="100" aria-label="Maximum total cost slider" />
+          <p id="capStatus" class="cap-status"></p>
+        </div>
+        <div class="retry-field">
+          <label for="retry"><span class="label-row">Extra reruns per failure<span class="hint-badge tip-target" data-tip="<strong>Extra reruns per failure</strong><p>Adds extra model work only after a task fails. A model's success rate decides how often this penalty applies; zero ignores failed-task overhead.</p>">?</span></span></label>
+          <div class="retry-control">
+            <input id="retry" type="range" min="0" max="3" step="0.1" value="1" aria-label="Extra reruns per failure" />
+            <div class="retry-display" id="retryValue">1.0×</div>
+          </div>
+          <p class="retry-note">Applied only after failure. Model success rate decides frequency.</p>
+        </div>
+        <div class="check-row">
+          <label for="planRefs">
+            <span>Show personal-plan pricing references</span>
+            <input id="planRefs" class="switch-input" type="checkbox" role="switch" />
+            <span class="switch-track" aria-hidden="true"></span>
+          </label>
+        </div>
+
+      </aside>
+
+      <section>
+        <button id="showParams" type="button" class="show-params" aria-label="Show parameters"><span class="dot"></span> Parameters</button>
+        <div class="cards">
+          <div class="metric alt">
+            <div class="label">Workload</div>
+            <div class="value" id="workloadMetric">174h</div>
+            <div class="sub" id="workloadSub">1 lane, 100% utilization</div>
+          </div>
+          <div class="metric">
+            <div class="label">Lowest raw</div>
+            <div class="value" id="rawWinner">&ndash;</div>
+            <div class="sub" id="rawWinnerSub">&ndash;</div>
+          </div>
+          <div class="metric good">
+            <div class="label">Lowest baseline cost</div>
+            <div class="value" id="adjWinner">&ndash;</div>
+            <div class="sub" id="adjWinnerSub">&ndash;</div>
+          </div>
+          <div class="metric alt">
+            <div class="label">Visible models</div>
+            <div class="value" id="visibleMetric">&ndash;</div>
+            <div class="sub">After filters</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="title-row"><h2>Cost Range by Time Scale</h2><span class="hint-badge tip-target" id="rangeFormulaTip">?</span></div>
+              <p class="panel-sub" id="rangeCaption">Each model from raw to risk-adjusted spend.</p>
+            </div>
+          </div>
+          <div class="chart-tools range-tools">
+            <div class="seg" id="rangeUnit" role="tablist" aria-label="time scale">
+              <button type="button" data-unit="task">Per task</button>
+              <button type="button" data-unit="hour">Per hour</button>
+              <button type="button" data-unit="day">Per day</button>
+              <button type="button" data-unit="month" class="active">Per month</button>
+            </div>
+            <div class="tool-group">
+              <label for="rangeCount">Rows</label>
+              <select id="rangeCount">
+                <option value="10">Top 10</option>
+                <option value="15" selected>Top 15</option>
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div class="tool-group">
+              <label for="rangeSort">Sort</label>
+              <select id="rangeSort">
+                <option value="adjusted" selected>Adjusted low</option>
+                <option value="raw">Raw low</option>
+                <option value="spread">Largest spread</option>
+                <option value="success">Success high</option>
+              </select>
+            </div>
+          </div>
+          <svg id="rangeChart" class="chart" viewBox="0 0 1120 620" role="img" aria-label="Cost range chart"></svg>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="title-row"><h2>Cost vs Success</h2><span class="hint-badge tip-target" id="scatterFormulaTip">?</span></div>
+              <p class="panel-sub" id="scatterCaption">X = pass proxy. Y = cost to match the highest-success model's output volume. Y uses a square-root scale, so lower-cost models remain readable. Runtime is ignored here.</p>
+            </div>
+          </div>
+          <svg id="scatterChart" class="chart" viewBox="0 0 1180 680" role="img" aria-label="Cost versus success scatter"></svg>
+          <div class="legend" id="legend"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Recommended Mixes</h2>
+          </div>
+          <svg id="mixChart" class="chart" viewBox="0 0 1180 460" role="img" aria-label="Recommended model mix chart"></svg>
+          <div class="legend" id="mixLegend" aria-label="Models used in recommended mixes"></div>
+        </div>
+
+        <div class="callouts">
+          <div class="callout good" id="composerEstimateCallout"><strong>Composer estimate:</strong> loading&hellip;</div>
+          <div class="callout"><strong>Overlap basis:</strong> 8 shared models. Worst delta: DeepSeek, &minus;42.5pp. Median: &minus;27.75pp. Simple median-shift fit MAE: about 12.2pp.</div>
+          <div class="callout warn" id="composerCaveatCallout"><strong>Caveat:</strong> loading&hellip;</div>
+        </div>
+
+        <section class="panel">
+          <div class="toolbar">
+            <div class="left">
+              <div class="title-row"><h2 style="margin:0">Model Detail</h2><span class="hint-badge tip-target" id="tableFormulaTip">?</span></div>
+              <span class="pill" id="rowCount">0 models</span>
+            </div>
+            <div class="right">
+              <input id="search" type="search" placeholder="Filter models&hellip;" />
+              <select id="sourceFilter">
+                <option value="all">All sources</option>
+                <option value="DeepSWE">DeepSWE only</option>
+                <option value="AA estimated">AA estimated only</option>
+              </select>
+              <select id="sortBy">
+                <option value="weighted">Sort: baseline CHF</option>
+                <option value="raw">Sort: raw CHF</option>
+                <option value="success">Sort: success</option>
+                <option value="tasks">Sort: tasks/month</option>
+                <option value="cost">Sort: USD/task</option>
+              </select>
+            </div>
+          </div>
+          <p class="panel-sub" id="composerPanelSub" style="margin-bottom:8px">Composer success uses an AA&rarr;DeepSWE estimate. Composer cost and minutes are loading from generated benchmark data.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-sort="name">Model</th>
+                  <th data-sort="source">Source</th>
+                  <th data-sort="success">Success</th>
+                  <th data-sort="minutes">Min/task</th>
+                  <th data-sort="cost">USD/task</th>
+                  <th data-sort="tasks">Tasks/mo</th>
+                  <th data-sort="raw">Raw CHF/mo</th>
+                  <th data-sort="weighted">Baseline CHF/mo</th>
+                  <th>Raw scale</th>
+                </tr>
+              </thead>
+              <tbody id="modelRows"></tbody>
+            </table>
+          </div>
+          <div class="mobile-list" id="mobileRows"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div><h2>How To Read</h2></div></div>
+          <p class="prose" id="composerHowToRead"><strong>Raw</strong> = spend at each model's own throughput. <strong>Baseline</strong> = spend required to deliver the same solved tasks/month as the highest-success model, with retry/follow-up penalty still applied.</p>
+        </section>
+
+        <footer>
+          Sources:
+          <a href="https://deepswe.datacurve.ai/">DeepSWE leaderboard</a>,
+          <a href="https://deepswe.datacurve.ai/blog">DeepSWE methodology</a>,
+          <a href="https://artificialanalysis.ai/articles/cursor-composer-2-5-coding-agent-index">Artificial Analysis Composer 2.5</a>,
+          <a href="https://cursor.com/cursorbench">CursorBench</a>,
+          <a href="https://www.x-rates.com/calculator/?amount=1&from=USD&to=CHF">USD/CHF reference</a>.
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const composerEstimateNotes = {
+      pessimistic: "AA 62 + worst overlap delta (-42.5, DeepSeek V4 Pro)",
+      base: "AA 62 + median overlap delta (-27.75)",
+      optimistic: "AA 62 + Q75 overlap delta (-11.75)"
+    };
+    const defaultComposerEstimateData = {
+      sourceLabel: "AA+CB->DeepSWE est.",
+      costNote: "Artificial Analysis measured Composer 2.5 standard at $0.07 and 9.3 minutes per task, while CursorBench reports Composer 2.5 at $0.55 per task. This report does not copy either dollar figure directly onto DeepSWE. Instead, it uses Composer-to-peer cost ratios within each benchmark and maps those ratios onto overlapping DeepSWE peers: optimistic uses the AA implied median (~$0.20), base averages the AA and CursorBench implied medians (~$0.48), and pessimistic uses the CursorBench near-peer upper bound (~$0.91). Composer minutes remain estimated from DeepSWE-vs-SWE-bench Pro runtime ratios and are not observed DeepSWE runs.",
+      scenarios: {
+        pessimistic: {cost: 0.912, minutes: 35.15, timeMultiplier: 3.78, costMethod: "CursorBench near-peer upper bound mapped onto DeepSWE peers"},
+        base: {cost: 0.482, minutes: 17.21, timeMultiplier: 1.85, costMethod: "average of AA-implied and CursorBench-implied DeepSWE medians"},
+        optimistic: {cost: 0.203, minutes: 13.30, timeMultiplier: 1.43, costMethod: "AA near-peer median mapped onto DeepSWE peers"}
+      }
+    };
+    let composerEstimateData = defaultComposerEstimateData;
+    const composerBenchmarkScenarios = () => composerEstimateData.scenarios;
+    const composerCostNote = () => composerEstimateData.costNote;
+    const composerScenarioNote = label => {
+      const scenario = composerBenchmarkScenarios()[label];
+      return `${composerEstimateNotes[label]}; cost estimated as ${scenario.costMethod}, minutes estimated from AA 9.3m scaled by ${scenario.timeMultiplier.toFixed(2)}x.`;
+    };
+    const overlapPairs = [
+      ["Claude Opus 4.7 Max", 67, 53.5],
+      ["GPT-5.5 XHigh", 65, 71.0],
+      ["Claude Opus 4.7 Medium", 61, 31.6],
+      ["GPT-5.5 Medium", 58, 48.0],
+      ["GLM-5.1", 53, 17.5],
+      ["Kimi K2.6", 50, 23.9],
+      ["DeepSeek V4 Pro", 50, 7.5],
+      ["Gemini 3.1 Pro", 43, 9.0]
+    ];
+    let baseModels = [
+      {name:"gpt-5.5 xhigh", family:"GPT-5.5", source:"DeepSWE", success:71.0, cost:6.628, minutes:21.41, group:"OpenAI"},
+      {name:"gpt-5.5 high", family:"GPT-5.5", source:"DeepSWE", success:61.9, cost:4.473, minutes:16.57, group:"OpenAI"},
+      {name:"gpt-5.5 medium", family:"GPT-5.5", source:"DeepSWE", success:48.0, cost:2.343, minutes:10.88, group:"OpenAI"},
+      // {name:"gpt-5.5 low pessimistic", family:"GPT-5.5", source:"AA estimated", success:9.6, aaIndex:52.1, cost:1.523, minutes:8.16, group:"OpenAI", estimateLabel:"pessimistic", estimateNote:"AA Coding 52.1 + worst overlap delta (-42.5); cost/time estimated from GPT-5.5 medium × 0.65/0.75"},
+      {name:"gpt-5.5 low average", family:"GPT-5.5", source:"AA estimated", success:24.35, aaIndex:52.1, cost:1.523, minutes:8.16, group:"OpenAI", estimateLabel:"base", estimateNote:"AA Coding 52.1 + median overlap delta (-27.75); cost/time estimated from GPT-5.5 medium × 0.65/0.75"},
+      {name:"gpt-5.5 low optimistic", family:"GPT-5.5", source:"AA estimated", success:40.35, aaIndex:52.1, cost:1.523, minutes:8.16, group:"OpenAI", estimateLabel:"optimistic", estimateNote:"AA Coding 52.1 + Q75 overlap delta (-11.75); cost/time estimated from GPT-5.5 medium × 0.65/0.75"},
+      {name:"gpt-5.4 xhigh", family:"GPT-5.4", source:"DeepSWE", success:54.6, cost:4.359, minutes:27.39, group:"OpenAI"},
+      {name:"gpt-5.4-mini xhigh", family:"GPT-5.4 mini", source:"DeepSWE", success:23.1, cost:2.130, minutes:35.18, group:"OpenAI"},
+      {name:"claude-opus-4.8 max", family:"Claude Opus 4.8", source:"DeepSWE", success:58.2, cost:12.581, minutes:44.25, group:"Anthropic"},
+      {name:"claude-opus-4.8 xhigh", family:"Claude Opus 4.8", source:"DeepSWE", success:57.7, cost:7.553, minutes:32.55, group:"Anthropic"},
+      {name:"claude-opus-4.8 high", family:"Claude Opus 4.8", source:"DeepSWE", success:50.7, cost:3.982, minutes:21.39, group:"Anthropic"},
+      {name:"claude-opus-4.8 medium", family:"Claude Opus 4.8", source:"DeepSWE", success:47.3, cost:3.254, minutes:20.42, group:"Anthropic"},
+      {name:"claude-opus-4.7 max", family:"Claude Opus 4.7", source:"DeepSWE", success:53.5, cost:18.186, minutes:41.15, group:"Anthropic"},
+      {name:"claude-opus-4.7 xhigh", family:"Claude Opus 4.7", source:"DeepSWE", success:44.7, cost:8.580, minutes:25.42, group:"Anthropic"},
+      {name:"claude-opus-4.7 high", family:"Claude Opus 4.7", source:"DeepSWE", success:40.3, cost:4.830, minutes:17.89, group:"Anthropic"},
+      {name:"claude-opus-4.7 medium", family:"Claude Opus 4.7", source:"DeepSWE", success:31.6, cost:2.340, minutes:11.27, group:"Anthropic"},
+      {name:"claude-sonnet-4.6 high", family:"Claude Sonnet 4.6", source:"DeepSWE", success:29.8, cost:5.366, minutes:44.67, group:"Anthropic"},
+      {name:"claude-opus-4.6 max", family:"Claude Opus 4.6", source:"DeepSWE", success:26.3, cost:5.223, minutes:33.68, group:"Anthropic"},
+      {name:"claude-haiku-4.5", family:"Claude Haiku 4.5", source:"DeepSWE", success:0.2, cost:0.838, minutes:10.13, group:"Anthropic"},
+      {name:"gemini-3.5-flash medium", family:"Gemini 3.5 Flash", source:"DeepSWE", success:28.3, cost:7.423, minutes:17.84, group:"Google"},
+      {name:"gemini-3.1-pro", family:"Gemini 3.1 Pro", source:"DeepSWE", success:9.0, cost:1.819, minutes:36.85, group:"Google"},
+      {name:"gemini-3-flash", family:"Gemini 3 Flash", source:"DeepSWE", success:5.2, cost:1.477, minutes:39.81, group:"Google"},
+      {name:"kimi-k2.6", family:"Kimi K2.6", source:"DeepSWE", success:23.9, cost:3.162, minutes:56.73, group:"Moonshot"},
+      {name:"mimo-v2.5-pro", family:"Mimo V2.5", source:"DeepSWE", success:19.5, cost:1.986, minutes:28.65, group:"Xiaomi"},
+      {name:"glm-5.1", family:"GLM 5.1", source:"DeepSWE", success:17.5, cost:7.455, minutes:35.97, group:"Z.ai"},
+      {name:"grok-build-0.1", family:"Grok Build 0.1", source:"DeepSWE", success:13.1, cost:6.590, minutes:45.58, group:"xAI"},
+      {name:"deepseek-v4-pro", family:"DeepSeek V4 Pro", source:"DeepSWE", success:7.5, cost:4.218, minutes:38.08, group:"DeepSeek"},
+      {name:"qwen3-6-plus", family:"Qwen3 6 Plus", source:"DeepSWE", success:2.7, cost:4.255, minutes:35.92, group:"Qwen"},
+      {name:"minimax-m2.7", family:"MiniMax M2.7", source:"DeepSWE", success:0.2, cost:0.704, minutes:36.01, group:"MiniMax"}
+    ];
+    const colors = {
+      OpenAI:"#10a37f", Anthropic:"#d76343", Google:"#4285f4", Cursor:"#64748b",
+      Moonshot:"#0ea5e9", Xiaomi:"#ec4899", "Z.ai":"#e11d48", xAI:"#7c3aed", DeepSeek:"#2563eb",
+      Qwen:"#f59e0b", MiniMax:"#0f766e", OpenRouter:"#a855f7"
+    };
+    const personalPlanMultipliers = {high: 5, low: 20};
+    const cursorCommunitySubsidyMultipliers = {high: 8, low: 4};
+    // Chart chrome palette
+    const C = {
+      paper: "#ffffff", ink: "#0f172a", strong: "#334155", muted: "#64748b", faint: "#94a3b8",
+      grid: "#eef2f8", gridStrong: "#e3e9f1", track: "#eef2f7", goodZone: "#ecfdf5", baseZone: "#f7f9fc"
+    };
+    let allGroups = [...new Set([...baseModels, {group:"Cursor"}].map(m => m.group))];
+    const excludedGroups = new Set();
+    const els = {};
+    let rangeUnitValue = "month";
+    let currencyMode = "CHF";
+    let showPlanRefs = false;
+    let workloadMode = "monthly";
+    let capTouched = false;
+
+    function buildComposerModels() {
+      const scenarios = composerBenchmarkScenarios();
+      return ["pessimistic", "base", "optimistic"].map(label => ({
+        name:`composer-2.5 ${label === 'base' ? 'average' : label}`,
+        family:"Composer 2.5",
+        source:"AA estimated",
+        sourceLabel:composerEstimateData.sourceLabel,
+        sourceNote:composerCostNote(),
+        success:label === "pessimistic" ? 19.5 : label === "base" ? 34.25 : 50.25,
+        aaIndex:62,
+        cost:scenarios[label].cost,
+        minutes:scenarios[label].minutes,
+        costNote:composerCostNote(),
+        minutesNote:composerCostNote(),
+        group:"Cursor",
+        estimateLabel:label,
+        estimateNote:composerScenarioNote(label)
+      }));
+    }
+    function buildModels() {
+      return [...baseModels, ...buildComposerModels()];
+    }
+    async function loadComposerEstimateData() {
+      try {
+        const response = await fetch("data/benchmarks/composer-estimate.json", {cache:"no-store"});
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        composerEstimateData = await response.json();
+      } catch (error) {
+        console.warn("Falling back to inline Composer estimate data", error);
+      }
+    }
+    const providerGroups = {
+      openai: "OpenAI", anthropic: "Anthropic", gemini: "Google", google: "Google", vertex_ai: "Google",
+      moonshot: "Moonshot", zai: "Z.ai", "z.ai": "Z.ai", xai: "xAI", deepseek: "DeepSeek", openrouter: "OpenRouter"
+    };
+    function displayModelName(model) {
+      return model.replace(/-/g, " ").replace(/\b\w/g, char => char.toUpperCase())
+        .replace("Gpt", "GPT").replace("Glm", "GLM").replace("Kimi", "Kimi")
+        .replace("Claude", "Claude").replace("Gemini", "Gemini");
+    }
+    async function loadDeepSWEModels() {
+      try {
+        const response = await fetch("data/deepswe/model-summary.json", {cache:"no-store"});
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const rows = await response.json();
+        baseModels = rows.map(row => {
+          const effort = row.reasoning_effort ? ` ${row.reasoning_effort}` : "";
+          const group = row.model.startsWith("claude-")
+            ? "Anthropic"
+            : providerGroups[String(row.provider).toLowerCase()] || displayModelName(row.provider);
+          return {
+            name: `${row.model}${effort}`,
+            family: displayModelName(row.model),
+            source: "DeepSWE",
+            success: row.pass_rate * 100,
+            cost: row.avg_cost_usd,
+            minutes: (row.avg_agent_duration_seconds || row.avg_duration_seconds) / 60,
+            tokens: (row.avg_input_tokens || 0) + (row.avg_output_tokens || 0),
+            group
+          };
+        }).filter(row => Number.isFinite(row.success) && Number.isFinite(row.cost) && row.minutes > 0);
+      } catch (error) {
+        console.warn("Falling back to inline DeepSWE data", error);
+      }
+      allGroups = [...new Set([...baseModels, {group:"Cursor"}].map(model => model.group))];
+    }
+    function renderComposerEstimateCopy() {
+      const optimistic = composerBenchmarkScenarios().optimistic;
+      const base = composerBenchmarkScenarios().base;
+      const pessimistic = composerBenchmarkScenarios().pessimistic;
+      document.getElementById("composerEstimateCallout").innerHTML = `<strong>Composer estimate:</strong> AA 62 &rarr; 34.3% base on a DeepSWE scale. Two-benchmark relative-cost base: about ${fmtUSD(base.cost)} per task at ${fmt1(base.minutes)}m.`;
+      document.getElementById("composerCaveatCallout").innerHTML = `<strong>Caveat:</strong> Composer cost / time are still estimates, not observed DeepSWE runs. Peer-ratio mapping from AA and CursorBench implies about ${fmtUSD(optimistic.cost)}&ndash;${fmtUSD(pessimistic.cost)} and ${fmt1(optimistic.minutes)}&ndash;${fmt1(pessimistic.minutes)}m per task.`;
+      document.getElementById("composerPanelSub").textContent = "Composer success uses an AA->DeepSWE estimate. Composer cost uses peer-relative ratios from Artificial Analysis and CursorBench mapped onto DeepSWE peers; Composer minutes remain estimated, while DeepSWE rows use observed Pass@1, cost, and runtime.";
+      document.getElementById("composerHowToRead").innerHTML = "<strong>Raw</strong> = spend at each model's own throughput. <strong>Baseline</strong> = spend required to deliver the same solved tasks/month as the highest-success model, with retry/follow-up penalty still applied. <strong>Composer</strong> = AA score adjusted by its overlap versus DeepSWE; cost is estimated from relative peer pricing in Artificial Analysis and CursorBench, while minutes remain estimated rather than observed DeepSWE runs.";
+    }
+    async function init() {
+      ["days","hours","parallel","util","totalHours","fx","retry","maxCost","maxCostSlider","search","sourceFilter","sortBy","rangeCount","rangeSort","planRefs"].forEach(id => els[id] = document.getElementById(id));
+      await loadComposerEstimateData();
+      await loadDeepSWEModels();
+      document.querySelectorAll("input, select").forEach(el => {
+        if (el.id !== "maxCostSlider") el.addEventListener("input", draw);
+      });
+      document.querySelectorAll("#workloadMode button").forEach(btn => btn.addEventListener("click", () => {
+        workloadMode = btn.dataset.mode;
+        syncWorkloadControls();
+        draw();
+      }));
+      const layout = document.querySelector(".layout");
+      const setCollapsed = c => layout.classList.toggle("collapsed", c);
+      document.getElementById("collapseBtn").addEventListener("click", () => setCollapsed(true));
+      document.getElementById("showParams").addEventListener("click", () => setCollapsed(false));
+      const fxToggle = document.getElementById("fxToggle");
+      const fxFlyout = document.getElementById("fxFlyout");
+      fxToggle.addEventListener("click", () => {
+        const open = fxFlyout.hidden;
+        fxFlyout.hidden = !open;
+        fxToggle.setAttribute("aria-expanded", String(open));
+      });
+      document.addEventListener("click", event => {
+        if (!event.target.closest(".fx-action")) {
+          fxFlyout.hidden = true;
+          fxToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+      document.querySelectorAll("#rangeUnit button").forEach(btn => btn.addEventListener("click", () => {
+        rangeUnitValue = btn.dataset.unit;
+        document.querySelectorAll("#rangeUnit button").forEach(b => b.classList.toggle("active", b === btn));
+        draw();
+      }));
+      document.querySelectorAll("#currencySeg button").forEach(btn => btn.addEventListener("click", () => {
+        currencyMode = btn.dataset.cur;
+        document.querySelectorAll("#currencySeg button").forEach(b => b.classList.toggle("active", b === btn));
+        els.fx.disabled = currencyMode === "USD";
+        draw();
+      }));
+      els.planRefs.addEventListener("change", () => {
+        showPlanRefs = els.planRefs.checked;
+        draw();
+      });
+      els.maxCost.addEventListener("input", () => {
+        capTouched = true;
+        els.maxCostSlider.value = els.maxCost.value;
+      });
+      els.maxCostSlider.addEventListener("input", () => {
+        capTouched = true;
+        els.maxCost.value = els.maxCostSlider.value;
+        draw();
+      });
+      document.querySelectorAll("th[data-sort]").forEach(th => th.addEventListener("click", () => { els.sortBy.value = th.dataset.sort; draw(); }));
+      document.getElementById("legend").addEventListener("click", event => {
+        const pill = event.target.closest("[data-group]");
+        if (!pill) return;
+        const group = pill.dataset.group;
+        if (excludedGroups.has(group)) {
+          excludedGroups.delete(group);
+        } else if (excludedGroups.size < allGroups.length - 1) {
+          excludedGroups.add(group);
+        }
+        renderLegend();
+        draw();
+      });
+      renderLegend();
+      initTooltip();
+      renderComposerEstimateCopy();
+      syncWorkloadControls();
+      draw();
+    }
+    function syncWorkloadControls() {
+      const monthly = workloadMode === "monthly";
+      document.getElementById("monthlyWorkloadControls").hidden = !monthly;
+      document.getElementById("totalWorkloadControls").hidden = monthly;
+      document.querySelectorAll("#workloadMode button").forEach(btn => btn.classList.toggle("active", btn.dataset.mode === workloadMode));
+      document.querySelector('#rangeUnit button[data-unit="month"]').textContent = monthly ? "Per month" : "Total";
+    }
+    function params() {
+      const days = num(els.days.value, 21.75);
+      const hours = num(els.hours.value, 8);
+      const parallel = num(els.parallel.value, 1);
+      const util = num(els.util.value, 100) / 100;
+      const totalHours = num(els.totalHours.value, 20);
+      return {
+        days, hours, parallel, util, totalHours,
+        workloadMode,
+        workHours: workloadMode === "total" ? totalHours : days * hours * parallel * util,
+        fx: num(els.fx.value, .7875),
+        retry: num(els.retry.value, 1),
+        maxCostEnabled: true,
+        maxCost: num(els.maxCost.value, 0),
+        failureSeverity: 1.5,
+        currency: currencyMode,
+        rate: currencyMode === "USD" ? 1 : num(els.fx.value, .7875)
+      };
+    }
+    function num(value, fallback) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+    function calc(m, p) {
+      const tasks = p.workHours * 60 / m.minutes;
+      const raw = tasks * m.cost * p.rate;
+      // retry=0: treat every model as 100% successful — failure rate is excluded from all cost math
+      const effectiveSuccessRate = p.retry > 0 ? (m.success / 100) : 1;
+      const failRate = 1 - effectiveSuccessRate;
+      const weighted = raw * (1 + p.retry * failRate);
+      const rawPerTask = m.cost * p.rate;
+      const weightedPerTask = rawPerTask * (1 + p.retry * failRate);
+      const successAdjustedPerTask = effectiveSuccessRate > 0 ? weightedPerTask / effectiveSuccessRate : Number.POSITIVE_INFINITY;
+      const riskAdjustedPerTask = effectiveSuccessRate > 0 ? weightedPerTask / Math.pow(effectiveSuccessRate, p.failureSeverity) : Number.POSITIVE_INFINITY;
+      const solved = tasks * effectiveSuccessRate;
+      const tokensPerSuccess = m.tokens && effectiveSuccessRate > 0 ? m.tokens / effectiveSuccessRate : null;
+      return {...m, tasks, raw, weighted, workloadWeighted: weighted, solved, rawPerTask, weightedPerTask, successAdjustedPerTask, riskAdjustedPerTask, effectiveSuccessRate, tokensPerSuccess};
+    }
+    function visibleRows(rows) {
+      const q = els.search.value.trim().toLowerCase();
+      const source = els.sourceFilter.value;
+      return rows.filter(r => {
+        const text = `${r.name} ${r.source} ${r.group}`.toLowerCase();
+        return groupVisible(r) && (!q || text.includes(q)) && (source === "all" || r.source === source);
+      });
+    }
+    function groupVisible(r) {
+      return !excludedGroups.has(r.group);
+    }
+    function sortRows(rows) {
+      const key = els.sortBy.value;
+      const sorted = [...rows].sort((a,b) => {
+        if (key === "name" || key === "source") return String(a[key]).localeCompare(String(b[key]));
+        if (key === "success") return b.success - a.success;
+        if (key === "tasks") return b.tasks - a.tasks;
+        return a[key] - b[key];
+      });
+      return sorted;
+    }
+    function draw() {
+      const p = params();
+      document.getElementById("parallelLabel").textContent = p.parallel;
+      document.getElementById("parallelUnit").textContent = `${p.parallel}×`;
+      document.getElementById("utilLabel").textContent = Math.round(p.util * 100);
+      document.getElementById("utilUnit").textContent = `${Math.round(p.util * 100)}%`;
+      document.getElementById("retryValue").textContent = `${fmt1(p.retry)}×`;
+      document.getElementById("maxCostUnit").textContent = p.currency;
+      document.getElementById("workloadMetric").textContent = `${fmt1(p.workHours)}h`;
+      document.getElementById("workloadSub").textContent = p.workloadMode === "total" ? "Fixed task or project budget" : `${p.parallel} lane(s), ${Math.round(p.util * 100)}% utilization`;
+      const period = p.workloadMode === "total" ? "total" : "mo";
+      document.querySelector('th[data-sort="raw"]').textContent = `Raw ${p.currency}/${period}`;
+      document.querySelector('th[data-sort="weighted"]').textContent = `Baseline ${p.currency}/${period}`;
+      document.querySelector('th[data-sort="tasks"]').textContent = p.workloadMode === "total" ? "Tasks" : "Tasks/mo";
+      document.getElementById("scatterCaption").textContent = p.workloadMode === "total"
+        ? "X = pass proxy. Y = total cost for the selected hours, normalized to the highest-success model's output. Square-root scale."
+        : "X = pass proxy. Y = monthly cost to match the highest-success model's output volume. Square-root scale.";
+
+      const throughputRows = buildModels().map(m => calc(m, p));
+      const capMaximum = Math.max(1, Math.ceil(Math.max(...throughputRows.map(r => r.workloadWeighted)) / 10) * 10);
+      const capStep = capMaximum <= 250 ? 1 : capMaximum <= 2000 ? 10 : 50;
+      els.maxCostSlider.max = capMaximum;
+      els.maxCostSlider.step = capStep;
+      if (!capTouched || p.maxCost > capMaximum) {
+        p.maxCost = capMaximum;
+        els.maxCost.value = capMaximum;
+      }
+      els.maxCostSlider.value = Math.min(capMaximum, p.maxCost);
+      const capRows = throughputRows.filter(r => r.workloadWeighted <= p.maxCost);
+      const chartRows = capRows.filter(groupVisible);
+      const capStatus = document.getElementById("capStatus");
+      capStatus.textContent = capRows.length === throughputRows.length ? "All models included." : capRows.length ? `${capRows.length} model${capRows.length === 1 ? "" : "s"} fit within ${fmtCHF(p.maxCost)}.` : `No model fits within ${fmtCHF(p.maxCost)}.`;
+      capStatus.classList.toggle("warn", !capRows.length);
+      // sort by solved (tasks × effectiveSuccessRate): at retry>0 surfaces high-success models;
+      // at retry=0 effectiveSuccessRate=1 for all so it surfaces the highest-throughput model
+      const baseline = [...chartRows].sort((a, b) => b.solved - a.solved)[0];
+      const baselineSolved = baseline?.solved || 0;
+      const rows = capRows.map(r => {
+        const esr = r.effectiveSuccessRate;
+        const baselineRaw = esr > 0 ? baselineSolved * r.rawPerTask / esr : Number.POSITIVE_INFINITY;
+        const baselineWeighted = esr > 0 ? baselineSolved * r.successAdjustedPerTask : Number.POSITIVE_INFINITY;
+        return {...r, baselineRaw, baselineWeighted, weighted: baselineWeighted};
+      });
+      const chartNormalizedRows = rows.filter(groupVisible);
+      const rawWinner = [...chartRows].sort((a,b) => a.raw - b.raw)[0];
+      const weightedWinner = [...chartNormalizedRows].sort((a,b) => a.weighted - b.weighted)[0];
+      document.getElementById("rawWinner").textContent = rawWinner ? fmtCHF(rawWinner.raw) : "—";
+      document.getElementById("rawWinnerSub").textContent = rawWinner ? rawWinner.name : "No visible model fits";
+      document.getElementById("adjWinner").textContent = weightedWinner ? fmtCHF(weightedWinner.weighted) : "—";
+      document.getElementById("adjWinnerSub").textContent = weightedWinner ? `${weightedWinner.name}${baseline ? ` · baseline ${baseline.name}` : ""}` : "Increase cap or show a provider";
+      renderFormulaHints(p, baseline, baselineSolved);
+
+      const filtered = sortRows(visibleRows(rows));
+      document.getElementById("rowCount").textContent = `${filtered.length} model${filtered.length === 1 ? "" : "s"}`;
+      document.getElementById("visibleMetric").textContent = filtered.length;
+      renderTable(filtered);
+      renderMobile(filtered);
+      renderScatter(chartRows);
+      renderRange(chartRows, baseline);
+      renderMixes(p, filtered);
+    }
+    function renderFormulaHints(p, baseline, baselineSolved) {
+      const baselineName = baseline?.name || "highest-success model";
+      const baselinePerSuccess = baseline?.successAdjustedPerTask || 0;
+      document.getElementById("paramFormulaTip").dataset.tip = tipHtml(
+        "Parameters formulas",
+        p.workloadMode === "total" ? "These drive a fixed-workload estimate and baseline comparison." : "These drive monthly throughput and baseline comparison.",
+        [
+          `${p.workloadMode === "total" ? "tasksForWorkload = totalAgentHours × 60 ÷ minutesPerTask" : "tasksPerMonth = days × hours × parallel × utilization × 60 ÷ minutesPerTask"}`,
+          `targetSolved = max(tasks × successRate)`,
+          `baselineCost = targetSolved × ((usdPerTask × fx) × (1 + ${fmt1(p.retry)} × failRate) ÷ successRate)`
+        ]
+      );
+      document.getElementById("rangeFormulaTip").dataset.tip = tipHtml(
+        "Range chart formulas",
+        "Expected shows retry-aware cost per solved task. Risk-adjusted pushes low success down harder.",
+        [
+          `expected = targetSolved × ((usdPerTask × fx) × (1 + ${fmt1(p.retry)} × failRate) ÷ successRate)`,
+          `riskAdjusted = targetSolved × ((usdPerTask × fx) × (1 + ${fmt1(p.retry)} × failRate) ÷ successRate^${fmt1(p.failureSeverity)})`
+        ]
+      );
+      document.getElementById("scatterFormulaTip").dataset.tip = tipHtml(
+        "Scatter formulas",
+        `Baseline model: ${baselineName} at ${fmtMoney2(baselinePerSuccess)} per successful task.`,
+        [
+          `expectedPerSuccess = ((usdPerTask × fx) × (1 + ${fmt1(p.retry)} × failRate)) ÷ successRate`,
+          `index = 100 × expectedPerSuccess ÷ baselineExpectedPerSuccess`
+        ]
+      );
+      document.getElementById("tableFormulaTip").dataset.tip = tipHtml(
+        "Model detail formulas",
+        `Target solved for this workload is locked to ${baselineName}: ${fmt0(baselineSolved)} solved tasks.`,
+        [
+          `rawCost = tasks × usdPerTask × fx`,
+          `baselineCost = targetSolved × ((usdPerTask × fx) × (1 + ${fmt1(p.retry)} × failRate) ÷ successRate)`
+        ]
+      );
+    }
+    function renderTable(rows) {
+      const maxRaw = Math.max(1, ...rows.map(r => r.raw));
+      document.getElementById("modelRows").innerHTML = rows.map(r => {
+        const w = Math.max(4, Math.log1p(r.raw) / Math.log1p(maxRaw) * 100);
+        const color = colors[r.group] || "#667085";
+        const sourceText = r.sourceLabel || r.source;
+        const sourceTip = r.sourceNote || r.estimateNote;
+        const minutesTip = r.minutesNote || r.estimateNote;
+        const costTip = r.costNote || r.estimateNote;
+        return `<tr>
+          <td><div class="name">${escapeHtml(r.name)}</div><div class="source">${escapeHtml(r.group)}</div></td>
+          <td${sourceTip ? ` class="tip-target" data-tip="${attr(sourceTip)}"` : ""}>${escapeHtml(sourceText)}</td>
+          <td>${fmtPct(r.success)}</td>
+          <td${minutesTip ? ` class="tip-target" data-tip="${attr(minutesTip)}"` : ""}>${fmt1(r.minutes)}</td>
+          <td${costTip ? ` class="tip-target" data-tip="${attr(costTip)}"` : ""}>${fmtUSD(r.cost)}</td>
+          <td>${fmt0(r.tasks)}</td>
+          <td>${fmtCHF(r.raw)}</td>
+          <td><strong>${fmtCHF(r.weighted)}</strong></td>
+          <td><span class="barbg"><span class="bar" style="width:${w}%;background:${color}"></span></span></td>
+        </tr>`;
+      }).join("");
+    }
+    function renderMobile(rows) {
+      document.getElementById("mobileRows").innerHTML = rows.map(r => `
+        <article class="model-card">
+          <div class="top">
+            <div><div class="name">${escapeHtml(r.name)}</div><div class="source">${escapeHtml(r.sourceLabel || r.source)} · ${escapeHtml(r.group)}</div></div>
+            <div class="price">${fmtCHF(r.weighted)}</div>
+          </div>
+          <div class="meta">
+            <div class="mini"><span>Raw</span><strong>${fmtCHF(r.raw)}</strong></div>
+            <div class="mini"><span>Baseline</span><strong>${fmtCHF(r.weighted)}</strong></div>
+            <div class="mini"><span>Success</span><strong>${fmtPct(r.success)}</strong></div>
+            <div class="mini"><span>${params().workloadMode === "total" ? "Tasks" : "Tasks/mo"}</span><strong>${fmt0(r.tasks)}</strong></div>
+            <div class="mini"${(r.costNote || r.estimateNote) ? ` title="${attr(r.costNote || r.estimateNote)}"` : ""}><span>USD/task</span><strong>${fmtUSD(r.cost)}</strong></div>
+            <div class="mini"${(r.minutesNote || r.estimateNote) ? ` title="${attr(r.minutesNote || r.estimateNote)}"` : ""}><span>Min/task</span><strong>${fmt1(r.minutes)}</strong></div>
+          </div>
+        </article>`).join("");
+    }
+
+    // ---------- Scatter: cost vs success, direct-labelled ----------
+    function renderScatter(rows) {
+      const w = 1180, h = 740, left = 64, right = 56, top = 42, bottom = 76;
+      const plotW = w - left - right, plotH = h - top - bottom;
+      const p = params();
+      const baseline = [...rows].sort((a, b) => b.success - a.success)[0];
+      const baselineSolvedS = baseline?.solved || 0;
+      const baselineMonthlySpend = baseline ? baselineSolvedS * baseline.successAdjustedPerTask : 1;
+      const actualCost = r => r.effectiveSuccessRate > 0 ? baselineSolvedS * r.successAdjustedPerTask : Number.POSITIVE_INFINITY;
+      const sorted = [...rows.map(actualCost)].filter(v => isFinite(v)).sort((a, b) => a - b);
+      const yCap = Math.max(100, Math.round(3 * baselineMonthlySpend / 100) * 100);
+      const yMax = yCap;
+      const xMax = 75;
+      const xBreak = 45;
+      const xBreakShare = .30;
+      const medianCost = sorted[Math.floor(sorted.length / 2)] || 0;
+      const sx = v => {
+        const value = Math.max(0, Math.min(v, xMax));
+        if (value <= xBreak) return left + value / xBreak * xBreakShare * plotW;
+        return left + (xBreakShare + (value - xBreak) / (xMax - xBreak) * (1 - xBreakShare)) * plotW;
+      };
+      const yTransform = v => Math.sqrt(Math.max(0, Math.min(v, yMax)));
+      const yTransformMax = yTransform(yMax);
+      const sy = v => top + plotH - yTransform(v) / yTransformMax * plotH;
+      const xLo = left, xHi = w - right, yLo = top, yHi = top + plotH;
+
+      let svg = `<rect width="${w}" height="${h}" rx="14" fill="${C.paper}"/>`;
+      const workloadLabel = p.workloadMode === "total" ? "total" : "mo";
+      svg += text(xHi, 25, `Square-root Y scale · Baseline: ${baseline?.name || "highest success"} = ${fmtMoney(baselineMonthlySpend)}/${workloadLabel} · cap ${fmtMoney(yCap)} (≈3×). Capped outliers sit on top edge.`, 11, C.faint, "end", 700);
+      // sweet-spot zone: success >= 50 and expected-success cost <= median
+      svg += `<rect x="${sx(50)}" y="${sy(medianCost)}" width="${xHi - sx(50)}" height="${yHi - sy(medianCost)}" fill="${C.goodZone}" opacity=".7"/>`;
+      // gridlines + axis ticks
+      const yTicks = [0, .04, .16, .36, .64, 1].map(fraction => yMax * fraction);
+      for (const val of yTicks) {
+        const gy = sy(val);
+        svg += `<line x1="${xLo}" y1="${gy}" x2="${xHi}" y2="${gy}" stroke="${C.grid}"/>`;
+        svg += text(xLo - 10, gy + 4, `${currencyMode} ${fmt0(val)}`, 11.5, C.faint, "end");
+      }
+      for (const val of [0, 15, 30, 45, 55, 65, 75]) {
+        const gx = sx(val);
+        svg += `<line x1="${gx}" y1="${yLo}" x2="${gx}" y2="${yHi}" stroke="${C.grid}"/>`;
+        svg += text(gx, yHi + 24, `${Math.round(val)}%`, 11.5, C.faint, "middle");
+      }
+      svg += `<line x1="${sx(50)}" y1="${yLo}" x2="${sx(50)}" y2="${yHi}" stroke="${C.gridStrong}" stroke-dasharray="5 5"/>`;
+      svg += `<line x1="${xLo}" y1="${sy(medianCost)}" x2="${xHi}" y2="${sy(medianCost)}" stroke="${C.gridStrong}" stroke-dasharray="5 5"/>`;
+
+      // geometry + label sizes
+      const pts = rows.map((r, idx) => {
+        const yValue = actualCost(r);
+        const px = sx(r.success), py = sy(yValue);
+        const rr = r.source === "AA estimated" ? 6 : 5.5;
+        const lab = shortLabel(r.name);
+        const wLab = approxW(lab.main, 12.5) + (lab.effort ? 5 + approxW(lab.effort, 10.5) : 0);
+        const capped = yValue > yMax;
+        return { r, idx, px, py, rr, lab, wLab, yValue, capped, score: (px - left) / plotW - yTransform(yValue) / yTransformMax };
+      });
+      const variantsByFamily = new Map();
+      pts.forEach(point => {
+        const points = variantsByFamily.get(point.r.family) || [];
+        points.push(point);
+        variantsByFamily.set(point.r.family, points);
+      });
+      const variantGroups = [...variantsByFamily.values()].filter(points => points.length > 1);
+      variantGroups.forEach(points => {
+        const carrier = [...points].sort((a, b) => b.r.success - a.r.success)[0];
+        carrier.score += .08;
+        carrier.familyLabel = true;
+        points.forEach(point => {
+          point.multiVariantFamily = true;
+          if (point === carrier) return;
+          point.familySibling = true;
+          point.lab = {main:"", effort: point.lab.effort || point.lab.main};
+          point.wLab = approxW(point.lab.effort, 10.5);
+        });
+      });
+      pts.forEach(point => {
+        point.crowded = pts.some(other => other !== point && Math.abs(other.px - point.px) < 52 && Math.abs(other.py - point.py) < 34);
+      });
+      const cappedWithLabels = [];
+      [...pts].filter(p => p.capped).sort((a, b) => a.px - b.px).forEach(p => {
+        if (!cappedWithLabels.some(q => Math.abs(q.px - p.px) < 86)) cappedWithLabels.push(p);
+      });
+      const shouldLabel = p => {
+        if (p.capped) return cappedWithLabels.includes(p);
+        if (!p.multiVariantFamily) return true;
+        if (p.familyLabel) return true;
+        if (p.familySibling) return !p.crowded;
+        return !p.crowded || p.r.success < 25 || p.yValue > yMax * .55;
+      };
+      const dotBox = pts.map(p => ({ x: p.px - p.rr, y: p.py - p.rr, w: 2 * p.rr, h: 2 * p.rr }));
+      const labH = 15, placed = [];
+      const ov = (a, b) => Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+
+      // place "interesting" (cheap + reliable) labels first so they win clean spots
+      [...pts].filter(shouldLabel).sort((a, b) => b.score - a.score).forEach(p => {
+        const cands = [
+          ["start", p.px + p.rr + 6, p.py + 4],
+          ["end", p.px - p.rr - 6, p.py + 4],
+          ["start", p.px + p.rr + 5, p.py - p.rr - 5],
+          ["end", p.px - p.rr - 5, p.py - p.rr - 5],
+          ["start", p.px + p.rr + 5, p.py + p.rr + 12],
+          ["end", p.px - p.rr - 5, p.py + p.rr + 12],
+          ["middle", p.px, p.py - p.rr - 8],
+          ["middle", p.px, p.py + p.rr + 14]
+        ];
+        let best = null, bestPen = Infinity;
+        for (const [anchor, lx, ly] of cands) {
+          const bx = anchor === "start" ? lx : anchor === "end" ? lx - p.wLab : lx - p.wLab / 2;
+          const box = { x: bx, y: ly - 11, w: p.wLab, h: labH };
+          let pen = 0;
+          if (box.x < xLo + 2) pen += (xLo + 2 - box.x) * 400;
+          if (box.x + box.w > xHi - 2) pen += (box.x + box.w - xHi + 2) * 400;
+          if (box.y < yLo + 1) pen += (yLo + 1 - box.y) * 400;
+          if (box.y + box.h > yHi - 1) pen += (box.y + box.h - yHi + 1) * 400;
+          for (const q of placed) pen += ov(box, q) * 2.2;
+          for (let k = 0; k < dotBox.length; k++) if (k !== p.idx) pen += ov(box, dotBox[k]) * 1.4;
+          if (pen < bestPen) { bestPen = pen; best = { anchor, lx, ly, box }; if (pen === 0) break; }
+        }
+        p.place = best;
+        placed.push(best.box);
+      });
+
+      // dots (white halo + fill)
+      variantGroups.forEach(points => {
+        const ordered = [...points].sort((a, b) => a.px - b.px);
+        const path = ordered.map((point, index) => `${index ? "L" : "M"} ${point.px} ${point.py}`).join(" ");
+        svg += `<path d="${path}" fill="none" stroke="#94a3b8" stroke-width="1.25" stroke-dasharray="3 5" opacity=".62"/>`;
+      });
+      pts.forEach(p => {
+        const color = colors[p.r.group] || "#667085";
+        const tip = `<strong>${escapeHtml(p.r.name)}</strong>\nSuccess ${fmtPct(p.r.success)}\n${fmtMoney(p.yValue)}/${workloadLabel} to match baseline output${p.capped ? " · capped" : ""}\n${fmtMoney2(p.r.successAdjustedPerTask)}/successful task (retry-aware)`;
+        svg += `<circle cx="${p.px}" cy="${p.py}" r="${p.rr + 2.5}" fill="#fff"/>`;
+        svg += `<circle class="tip-target" data-tip="${attr(tip)}" cx="${p.px}" cy="${p.py}" r="${p.rr}" fill="${color}" opacity=".92" stroke="#fff" stroke-width="1.5"></circle>`;
+        if (p.capped) svg += `<path d="M ${p.px - 5} ${p.py - 9} L ${p.px} ${p.py - 16} L ${p.px + 5} ${p.py - 9}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+      });
+      // labels (model normal, effort muted + smaller)
+      pts.filter(p => p.place).forEach(p => { svg += scatterLabel(p.place.lx, p.place.ly, p.place.anchor, p.lab); });
+
+      svg += text(left + plotW / 2, h - 14, "Success / pass proxy", 13, C.strong, "middle", 800);
+      svg += `<text x="19" y="${top + plotH / 2}" transform="rotate(-90 19 ${top + plotH / 2})" font-size="13" fill="${C.strong}" text-anchor="middle" font-weight="800">${p.workloadMode === "total" ? "Total" : "Monthly"} cost to match baseline output (${currencyMode}, square-root scale)</text>`;
+      setChart("scatterChart", w, h, svg);
+    }
+    // "claude-opus-4.8 medium" -> {main:"opus-4.8", effort:"medium"}
+    function shortLabel(name) {
+      const s = name.replace(/^claude-/, "");
+      const sp = s.indexOf(" ");
+      return sp === -1 ? { main: s, effort: "" } : { main: s.slice(0, sp), effort: s.slice(sp + 1) };
+    }
+    function scatterLabel(x, y, anchor, lab) {
+      let s = `<text x="${x}" y="${y}" text-anchor="${anchor}" pointer-events="none" style="font-variant-numeric:tabular-nums">`;
+      if (lab.main) s += `<tspan font-size="12.5" font-weight="700" fill="${C.ink}">${escapeHtml(lab.main)}</tspan>`;
+      if (lab.effort) s += `<tspan dx="${lab.main ? 4 : 0}" font-size="10.5" font-weight="600" fill="${C.faint}">${escapeHtml(lab.effort)}</tspan>`;
+      return s + `</text>`;
+    }
+
+    // ---------- Range: one full-width dumbbell chart, unit-switched ----------
+    function renderRange(rows, baseline) {
+      renderRangeUnit(rows, baseline, rangeUnitValue, "rangeChart");
+    }
+    function renderRangeUnit(rows, baseline, unit, elementId) {
+      const count = els.rangeCount.value;
+      const sort = els.rangeSort.value;
+      const p = params();
+      let rangeRows = rows.filter(r => r.success > 0);
+      const targetSolvedPerHour = rangeTargetSolvedPerHour(rangeRows, baseline);
+      rangeRows = rangeRows.sort((a, b) => {
+        const av = rangeValue(a, unit, targetSolvedPerHour), bv = rangeValue(b, unit, targetSolvedPerHour);
+        if (sort === "raw") return av.raw - bv.raw;
+        if (sort === "spread") return (bv.adjusted - bv.raw) - (av.adjusted - av.raw);
+        if (sort === "success") return b.success - a.success;
+        return av.adjusted - bv.adjusted;
+      });
+      if (count !== "all") rangeRows = rangeRows.slice(0, Number(count));
+
+      document.getElementById("rangeCaption").textContent =
+        `${rangeCaption(unit, count)}${showPlanRefs ? " Personal-plan reference bands are shown." : ""}`;
+
+      const w = 1120;
+      const rowH = count === "all" ? 26 : 34;
+      const top = 30, bottom = 56, nameGutter = 250;
+      const h = top + rangeRows.length * rowH + bottom;
+
+      // value label widths drive the right gutter so nothing clips
+      const valStr = r => { const rv = rangeValue(r, unit, targetSolvedPerHour); return `${fmtChartCHF(rv.raw)} – ${fmtChartCHF(rv.adjusted)}`; };
+      const maxValW = Math.max(70, ...rangeRows.map(r => approxW(valStr(r), 13)));
+      const right = Math.min(250, maxValW + 28);
+      const left = nameGutter;
+      const plotW = w - left - right;
+      const maxValue = Math.max(...rangeRows.map(r => rangeValue(r, unit, targetSolvedPerHour).adjusted), 1);
+      const x = v => left + plotW * v / maxValue;
+
+      let svg = `<rect width="${w}" height="${h}" rx="14" fill="${C.paper}"/>`;
+      // x gridlines + ticks
+      const ticks = 4;
+      for (let i = 0; i <= ticks; i++) {
+        const v = maxValue * i / ticks;
+        const gx = x(v);
+        svg += `<line x1="${gx}" y1="${top - 4}" x2="${gx}" y2="${top + rangeRows.length * rowH + 6}" stroke="${C.grid}"/>`;
+        svg += text(gx, h - 30, fmtChartCHF(v), 12, C.faint, i === 0 ? "start" : "middle");
+      }
+      const maxNameChars = Math.floor((nameGutter - 22) / (15 * 0.56));
+      rangeRows.forEach((r, i) => {
+        const y = top + i * rowH + rowH / 2;
+        const color = colors[r.group] || "#667085";
+        const rv = rangeValue(r, unit, targetSolvedPerHour);
+        const xr = x(rv.raw), xa = x(rv.adjusted);
+        const spanTip = `<strong>${escapeHtml(r.name)}</strong>\n${fmtChartCHF(rv.raw)} → ${fmtChartCHF(rv.adjusted)}\n${fmtPct(r.success)} success`;
+        const rawTip = `<strong>${escapeHtml(r.name)}</strong>\n${rangeLowLabel(unit)} ${fmtChartCHF(rv.raw)}`;
+        const adjTip = `<strong>${escapeHtml(r.name)}</strong>\nAdjusted ${fmtChartCHF(rv.adjusted)}\n${fmtPct(r.success)} success`;
+        svg += text(14, y + 5, trimName(r.name, maxNameChars), 15, C.ink, "start", 700);
+        // connecting segment
+        svg += `<line class="tip-target" data-tip="${attr(spanTip)}" x1="${xr}" y1="${y}" x2="${xa}" y2="${y}" stroke="${color}" stroke-width="16" stroke-linecap="round" opacity=".14"/>`;
+        svg += `<line x1="${xr}" y1="${y}" x2="${xa}" y2="${y}" stroke="${color}" stroke-width="5" stroke-linecap="round" opacity=".5" pointer-events="none"/>`;
+        // raw dot (hollow)
+        svg += `<circle class="tip-target" data-tip="${attr(rawTip)}" cx="${xr}" cy="${y}" r="9" fill="${color}" opacity=".001"></circle>`;
+        svg += `<circle pointer-events="none" cx="${xr}" cy="${y}" r="5.5" fill="#fff" stroke="${color}" stroke-width="2.5"></circle>`;
+        // adjusted dot (filled)
+        svg += `<circle class="tip-target" data-tip="${attr(adjTip)}" cx="${xa}" cy="${y}" r="9" fill="${color}" opacity=".001"></circle>`;
+        svg += `<circle pointer-events="none" cx="${xa}" cy="${y}" r="6" fill="${color}"></circle>`;
+        svg += text(xa + 12, y + 5, valStr(r), 13, C.strong, "start", 650);
+
+        if (showPlanRefs && isCursorFirstPartyModel(r)) {
+          if (unit !== "task") {
+            const lowValue = rv.raw / cursorCommunitySubsidyMultipliers.high;
+            const highValue = rv.adjusted / cursorCommunitySubsidyMultipliers.low;
+            const lowX = Math.max(left, Math.min(left + plotW, x(Math.min(lowValue, highValue))));
+            const highX = Math.max(left, Math.min(left + plotW, x(Math.max(lowValue, highValue))));
+            const refY = y + 10;
+            const rangeTip = `<strong>Cursor first-party estimate (unofficial)</strong>\nComposer 2.5 and Grok 4.5 use a separate Cursor pool.\nCommunity reports imply roughly 4x–8x API-equivalent usage.\nCache rate, Fast mode, and temporary promos can change this sharply.`;
+            const lowTip = `<strong>8x community estimate</strong>\n${fmtChartCHF(rv.raw)} ÷ 8 = ${fmtChartCHF(lowValue)}\nNot a guaranteed Cursor allowance.`;
+            const highTip = `<strong>4x community estimate</strong>\n${fmtChartCHF(rv.adjusted)} ÷ 4 = ${fmtChartCHF(highValue)}\nNot a guaranteed Cursor allowance.`;
+            svg += `<line class="tip-target" data-tip="${attr(rangeTip)}" x1="${lowX}" y1="${refY}" x2="${highX}" y2="${refY}" stroke="${color}" stroke-width="6" stroke-linecap="round" stroke-dasharray="3 4" opacity=".48"/>`;
+            svg += `<circle class="tip-target" data-tip="${attr(lowTip)}" cx="${lowX}" cy="${refY}" r="4.5" fill="#fff" stroke="${color}" stroke-width="2" opacity=".9"/>`;
+            svg += `<circle class="tip-target" data-tip="${attr(highTip)}" cx="${highX}" cy="${refY}" r="4.5" fill="${color}" opacity=".7"/>`;
+          }
+        } else if (showPlanRefs && (r.group === "OpenAI" || r.group === "Anthropic")) {
+          const lowValue = rv.raw / personalPlanMultipliers.low;
+          const highValue = rv.adjusted / personalPlanMultipliers.high;
+          const lowX = Math.max(left, Math.min(left + plotW, x(Math.min(lowValue, highValue))));
+          const highX = Math.max(left, Math.min(left + plotW, x(Math.max(lowValue, highValue))));
+          const refY = y + 10;
+          const rangeTip = `<strong>${escapeHtml(r.group)} personal-plan equivalent range</strong>\nFrom expected ${fmtChartCHF(rv.raw)} ÷ 20x = ${fmtChartCHF(lowValue)}\nTo adjusted ${fmtChartCHF(rv.adjusted)} ÷ 5x = ${fmtChartCHF(highValue)}`;
+          const lowTip = `<strong>20x equivalent</strong>\n${fmtChartCHF(rv.raw)} ÷ 20 = ${fmtChartCHF(lowValue)}`;
+          const highTip = `<strong>5x equivalent</strong>\n${fmtChartCHF(rv.adjusted)} ÷ 5 = ${fmtChartCHF(highValue)}`;
+          svg += `<line class="tip-target" data-tip="${attr(rangeTip)}" x1="${lowX}" y1="${refY}" x2="${highX}" y2="${refY}" stroke="${color}" stroke-width="6" stroke-linecap="round" opacity=".23"/>`;
+          svg += `<circle class="tip-target" data-tip="${attr(lowTip)}" cx="${lowX}" cy="${refY}" r="4.5" fill="#fff" stroke="${color}" stroke-width="2" opacity=".85"/>`;
+          svg += `<circle class="tip-target" data-tip="${attr(highTip)}" cx="${highX}" cy="${refY}" r="4.5" fill="${color}" opacity=".45"/>`;
+        }
+      });
+      svg += text(14, h - 30, rangeAxisLabel(unit), 12, C.muted, "start", 700);
+      setChart(elementId, w, h, svg);
+    }
+    function rangeTargetSolvedPerHour(rows, baseline) {
+      const p = params();
+      const scheduleMultiplier = p.workloadMode === "monthly" ? p.parallel * p.util : 1;
+      if (baseline) return 60 / baseline.minutes * scheduleMultiplier * (baseline.effectiveSuccessRate ?? baseline.success / 100);
+      return Math.max(0, ...rows.map(r => 60 / r.minutes * scheduleMultiplier * (r.effectiveSuccessRate ?? r.success / 100)));
+    }
+    function rangeValue(r, unit, targetSolvedPerHour = 0) {
+      const p = params();
+      if (unit === "task") {
+        return {raw: r.successAdjustedPerTask, adjusted: r.riskAdjustedPerTask, unitLabel: rangeUnitLabel(unit)};
+      }
+      const periodHours = unit === "month"
+        ? (p.workloadMode === "total" ? p.workHours : p.hours * p.days)
+        : unit === "day"
+          ? p.hours
+          : 1;
+      const targetSolved = targetSolvedPerHour * periodHours;
+      const raw = r.successAdjustedPerTask * targetSolved;
+      const adjusted = r.riskAdjustedPerTask * targetSolved;
+      return {raw, adjusted, unitLabel: rangeUnitLabel(unit)};
+    }
+    function rangeCaption(unit, count) {
+      const prefix = count === "all" ? "All models" : `Top ${count}`;
+      if (unit === "task") return `${prefix} · expected to risk-adjusted ${rangeUnitLabel(unit)} (retry ${fmt1(params().retry)}).`;
+      return `${prefix} · spend to match the highest-success model's solved output ${rangeUnitLabel(unit)} (expected → risk-adjusted, retry ${fmt1(params().retry)}).`;
+    }
+    function rangeLowLabel(unit) {
+      return "Expected";
+    }
+    function rangeUnitLabel(unit) {
+      if (unit === "month") return params().workloadMode === "total" ? "for total hours" : "per month";
+      if (unit === "day") return "per day";
+      if (unit === "hour") return "per hour";
+      return "per task";
+    }
+    function rangeTitle(unit) {
+      if (unit === "month") return params().workloadMode === "total" ? "Total" : "Monthly";
+      if (unit === "day") return "Daily";
+      if (unit === "hour") return "Hourly";
+      return "Per-task";
+    }
+    function isCursorFirstPartyModel(row) {
+      return row.family === "Composer 2.5" || /^grok-4-5\b/.test(row.name);
+    }
+    function rangeAxisLabel(unit) {
+      const c = currencyMode;
+      if (unit === "month") return params().workloadMode === "total" ? `${c} / total workload: matched output expected → risk-adjusted` : `${c} / month: matched output expected → risk-adjusted`;
+      if (unit === "day") return `${c} / day: matched output expected → risk-adjusted`;
+      if (unit === "hour") return `${c} / hour: matched output expected → risk-adjusted`;
+      return `${c} / task: expected → risk-adjusted`;
+    }
+
+    // ---------- Recommended mixes ----------
+    function renderMixes(p, rows) {
+      const manualColor = "#d0d5dd";
+      const candidates = rows.filter(row => row.success > 0 && row.cost > 0 && row.minutes > 0);
+      const frontier = paretoFrontier(candidates);
+      const tiers = [
+        {budget: 50, qualityPower: 1, planShares: [.06, .10, .14], reviewShares: [.05, .08, .12]},
+        {budget: 100, qualityPower: 2.6, planShares: [.08, .14, .20], reviewShares: [.06, .10, .16]},
+        {budget: 200, qualityPower: 5, planShares: [.12, .20, .28], reviewShares: [.08, .14, .22]}
+      ];
+      const roleCandidates = frontier.length >= 3 ? frontier : candidates;
+      const mixes = tiers.map(tier => {
+        const best = findBestMix(roleCandidates, p, tier, full => {
+          const weightedPerHour = full.weighted / Math.max(full.hours, 1);
+          const coveredHours = Math.min(full.hours, tier.budget / Math.max(weightedPerHour, .01));
+          const reliability = Math.pow(full.effectiveSuccess / 100, tier.qualityPower);
+          return {utility: (coveredHours / Math.max(full.hours, 1)) * reliability, weightedPerHour, coveredHours};
+        });
+        if (best) best.name = `${currencyMode} ${fmt0(tier.budget)} target`;
+        return best;
+      }).filter(Boolean);
+      const autonomy = findBestMix(roleCandidates, p, {
+        planShares: [.12, .18, .24, .30],
+        reviewShares: [.10, .16, .22, .28]
+      }, full => ({utility: -autonomyCost(full), weightedPerHour: full.weighted / Math.max(full.hours, 1), coveredHours: full.hours}));
+      if (autonomy) {
+        mixes.push({
+          ...autonomy,
+          name: p.workloadMode === "total" ? "Full task coverage" : "Best 100% autonomy",
+          budget: autonomy.weighted,
+          coveredHours: autonomy.hours,
+          autonomy: true
+        });
+      }
+      if (!mixes.length) {
+        setChart("mixChart", 1180, 126, `<rect width="1180" height="126" rx="14" fill="${C.paper}"/><text x="590" y="56" font-size="16" fill="${C.strong}" text-anchor="middle" font-weight="800">No three-role mix fits the current model filter.</text><text x="590" y="82" font-size="13" fill="${C.muted}" text-anchor="middle">Raise the maximum cost or include more providers.</text>`);
+        document.getElementById("mixLegend").innerHTML = "";
+        return;
+      }
+      const w = 1180, left = 250, right = 70, top = 42, rowH = 96;
+      const h = top + mixes.length * rowH + 28;
+      const maxHours = Math.max(p.workHours, 1);
+      const plotW = w - left - right;
+      let svg = `<rect width="${w}" height="${h}" rx="14" fill="${C.paper}"/>`;
+      svg += `<defs><linearGradient id="mixGloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient><pattern id="reviewHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#fff" stroke-width="2" stroke-opacity=".55"/></pattern></defs>`;
+      [[0, "0h"], [.5, `${fmt0(maxHours / 2)}h`], [1, `${fmt0(maxHours)}h`]].forEach(([t, label]) => {
+        const x = left + plotW * t;
+        svg += `<line x1="${x}" y1="${top-18}" x2="${x}" y2="${h-48}" stroke="${C.grid}"/>`;
+        svg += text(x, h - 20, label, 11, C.muted, "middle", 700);
+      });
+      mixes.forEach((m, i) => {
+        const y = top + i * rowH;
+        const planHours = m.coveredHours * m.planShare;
+        const reviewHours = m.coveredHours * m.reviewShare;
+        const execHours = m.coveredHours * (1 - m.planShare - m.reviewShare);
+        const manualHours = Math.max(0, maxHours - m.coveredHours);
+        const estimatedSpend = m.coveredHours * m.weightedPerHour;
+        const unusedBudget = Math.max(0, m.budget - estimatedSpend);
+        const planW = plotW * planHours / maxHours;
+        const execW = plotW * execHours / maxHours;
+        const reviewW = plotW * reviewHours / maxHours;
+        const manualW = plotW * manualHours / maxHours;
+        const planColor = colors[m.plan.group] || "#183b63";
+        const execColor = colors[m.exec.group] || "#667085";
+        const reviewColor = colors[m.reviewer.group] || "#d76343";
+        const planTokenLine = m.plan.tokensPerSuccess ? `\n${fmtTokens(m.plan.tokensPerSuccess)} tokens / successful task` : "";
+        const planTip = `<strong>${escapeHtml(m.plan.name)}</strong>\nPlanning ${fmt1(planHours)}h\n${fmtPct(m.plan.success)} success${planTokenLine}`;
+        const execTip = `<strong>${escapeHtml(m.exec.name)}</strong>\nExecution ${fmt1(execHours)}h\n${fmtPct(m.exec.success)} base success`;
+        const reviewTip = `<strong>${escapeHtml(m.reviewer.name)}</strong>\nReview ${fmt1(reviewHours)}h\n${fmtPct(m.reviewer.success)} correction quality`;
+        const manualTip = `<strong>Manual gap</strong>\n${fmt1(manualHours)}h\n${fmtChartCHF(unusedBudget)} unused`;
+        const barY = y + 34;
+        const rowLabel = m.autonomy
+          ? p.workloadMode === "total"
+            ? `Full task coverage · ${fmtChartCHF(m.weighted)}`
+            : `100% autonomy · ${fmtChartCHF(m.weighted)}/mo`
+          : m.name;
+        svg += text(14, barY + 20, rowLabel, 14, C.ink, "start", 800);
+        const planLabel = `P ${trimName(m.plan.name, 16)}`;
+        const execLabel = `E ${trimName(m.exec.name, 16)}`;
+        const reviewLabel = `R ${trimName(m.reviewer.name, 16)}`;
+        if (planW >= approxW(planLabel, 10) + 12) svg += text(left + 6, barY - 7, planLabel, 10, planColor, "start", 800);
+        if (execW >= approxW(execLabel, 10) + 12) svg += text(left + planW + 6, barY - 7, execLabel, 10, execColor, "start", 800);
+        if (reviewW >= approxW(reviewLabel, 10) + 12) svg += text(left + planW + execW + 6, barY - 7, reviewLabel, 10, reviewColor, "start", 800);
+        svg += `<rect x="${left}" y="${barY}" width="${plotW}" height="30" rx="7" fill="${C.track}"/>`;
+        svg += `<rect class="tip-target" data-tip="${attr(planTip)}" x="${left}" y="${barY}" width="${Math.max(planW, 4)}" height="30" rx="7" fill="${planColor}"/>`;
+        svg += `<rect class="tip-target" data-tip="${attr(execTip)}" x="${left + planW}" y="${barY}" width="${Math.max(execW, 4)}" height="30" fill="${execColor}" opacity=".9"/>`;
+        svg += `<rect class="tip-target" data-tip="${attr(reviewTip)}" x="${left + planW + execW}" y="${barY}" width="${Math.max(reviewW, 4)}" height="30" fill="${reviewColor}" opacity=".9"/>`;
+        svg += `<rect x="${left + planW + execW}" y="${barY}" width="${Math.max(reviewW, 4)}" height="30" fill="url(#reviewHatch)" pointer-events="none"/>`;
+        if (manualW > 0) svg += `<rect class="tip-target" data-tip="${attr(manualTip)}" x="${left + planW + execW + reviewW}" y="${barY}" width="${Math.max(manualW, 4)}" height="30" rx="7" fill="${manualColor}"/>`;
+        svg += `<rect x="${left}" y="${barY}" width="${plotW}" height="30" rx="7" fill="url(#mixGloss)" pointer-events="none"/>`;
+        if (planW >= 64) svg += text(left + 8, barY + 20, `${fmt1(planHours)}h`, 10, "#fff", "start", 850);
+        if (execW >= 72) svg += text(left + planW + 8, barY + 20, `${fmt1(execHours)}h`, 10, "#fff", "start", 850);
+        if (reviewW >= 70) svg += text(left + planW + execW + 8, barY + 20, `${fmt1(reviewHours)}h`, 10, "#fff", "start", 850);
+        if (manualW >= 86) svg += text(left + planW + execW + reviewW + 8, barY + 20, `${fmt1(manualHours)}h`, 10, C.strong, "start", 850);
+      });
+      setChart("mixChart", w, h, svg);
+      const roleModels = new Map();
+      mixes.forEach(mix => {
+        [["Plan", mix.plan], ["Execute", mix.exec], ["Review", mix.reviewer]].forEach(([role, model]) => {
+          const key = `${role}:${model.name}`;
+          if (!roleModels.has(key)) roleModels.set(key, {role, model});
+        });
+      });
+      document.getElementById("mixLegend").innerHTML = [...roleModels.values()].map(({role, model}) => {
+        const color = colors[model.group] || "#667085";
+        const tip = `<strong>${escapeHtml(role)}</strong>\n${escapeHtml(model.name)}\n${escapeHtml(model.group)}`;
+        return `<span class="pill tip-target" data-tip="${attr(tip)}"><span class="dot" style="background:${color}"></span>${escapeHtml(role)}: ${escapeHtml(model.name)}</span>`;
+      }).join("");
+    }
+    function paretoFrontier(rows) {
+      return rows.filter(row => !rows.some(other => {
+        if (other === row) return false;
+        const noWorse = other.success >= row.success
+          && other.successAdjustedPerTask <= row.successAdjustedPerTask
+          && other.minutes <= row.minutes
+          && (!row.tokensPerSuccess || !other.tokensPerSuccess || other.tokensPerSuccess <= row.tokensPerSuccess);
+        const strictlyBetter = other.success > row.success
+          || other.successAdjustedPerTask < row.successAdjustedPerTask
+          || other.minutes < row.minutes
+          || (row.tokensPerSuccess && other.tokensPerSuccess && other.tokensPerSuccess < row.tokensPerSuccess);
+        return noWorse && strictlyBetter;
+      }));
+    }
+    function autonomyCost(row) {
+      return row.weighted / Math.max(row.effectiveSuccess / 100, .01);
+    }
+    function findBestMix(candidates, p, config, evaluate) {
+      const tokenLoads = candidates.map(row => row.tokensPerSuccess).filter(Number.isFinite).sort((a, b) => a - b);
+      const tokenMedian = tokenLoads.length ? tokenLoads[Math.floor(tokenLoads.length / 2)] : null;
+      const roleCandidates = candidates.map(row => {
+        const tokenRatio = tokenMedian && row.tokensPerSuccess ? row.tokensPerSuccess / tokenMedian : 1;
+        // Tokens are an efficiency cost, not an intelligence penalty. The exponent keeps this secondary to outcome quality.
+        const tokenEfficiency = Math.pow(Math.min(1, 1 / Math.max(tokenRatio, .01)), .18);
+        return {...row, planningScore: (row.success / 100) * tokenEfficiency};
+      });
+      let best = null;
+      for (const plan of roleCandidates) {
+        for (const exec of roleCandidates) {
+          if (plan.family === exec.family || plan.success < exec.success) continue;
+          for (const reviewer of roleCandidates) {
+            if (reviewer.family === plan.family || reviewer.family === exec.family) continue;
+            for (const planShare of config.planShares) {
+              for (const reviewShare of config.reviewShares) {
+                if (planShare + reviewShare >= .5) continue;
+                const full = mixCalc({plan, exec, reviewer, planShare, reviewShare}, p);
+                const scored = evaluate(full);
+                if (!best || scored.utility > best.utility) best = {...full, ...scored};
+              }
+            }
+          }
+        }
+      }
+      return best;
+    }
+    function mixCalc(m, p) {
+      const hours = p.workHours;
+      const planRuns = hours * 60 * m.planShare / m.plan.minutes;
+      const execRuns = hours * 60 * (1 - m.planShare - m.reviewShare) / m.exec.minutes;
+      const reviewRuns = hours * 60 * m.reviewShare / m.reviewer.minutes;
+      const planRaw = planRuns * m.plan.cost * p.rate;
+      const execRaw = execRuns * m.exec.cost * p.rate;
+      const reviewRaw = reviewRuns * m.reviewer.cost * p.rate;
+      const planFail = 1 - m.plan.success / 100;
+      const execFail = 1 - m.exec.success / 100;
+      const reviewFail = 1 - m.reviewer.success / 100;
+      // Planning and review each remove a bounded share of the executor's remaining failures.
+      const planningLift = (1 - Math.exp(-6 * m.planShare)) * (m.plan.planningScore ?? (1 - planFail));
+      const reviewLift = (1 - Math.exp(-7 * m.reviewShare)) * (1 - reviewFail);
+      const afterPlanSuccess = (1 - execFail * (1 - planningLift)) * 100;
+      const effectiveExecSuccess = (1 - execFail * (1 - planningLift) * (1 - reviewLift)) * 100;
+      const planWeighted = planRaw * (1 + p.retry * planFail);
+      const execWeighted = execRaw * (1 + p.retry * (1 - effectiveExecSuccess / 100));
+      const reviewWeighted = reviewRaw * (1 + p.retry * reviewFail);
+      return {
+        ...m,
+        hours,
+        raw: planRaw + execRaw + reviewRaw,
+        weighted: planWeighted + execWeighted + reviewWeighted,
+        planWeighted,
+        execWeighted,
+        reviewWeighted,
+        success: effectiveExecSuccess,
+        effectiveSuccess: effectiveExecSuccess,
+        planningLift,
+        reviewLift,
+        planningGain: afterPlanSuccess - m.exec.success,
+        reviewGain: effectiveExecSuccess - afterPlanSuccess
+      };
+    }
+    function renderLegend() {
+      document.getElementById("legend").innerHTML = allGroups.map(g => {
+        const off = excludedGroups.has(g);
+        return `<button type="button" class="pill legend-pill${off ? " off" : ""}" data-group="${escapeHtml(g)}" aria-pressed="${!off}" title="Click to ${off ? "show" : "hide"} ${escapeHtml(g)}"><span class="dot" style="background:${colors[g] || "#667085"}"></span>${escapeHtml(g)}</button>`;
+      }).join("");
+    }
+    function setChart(id, w, h, inner) {
+      const el = document.getElementById(id);
+      el.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      el.innerHTML = inner;
+    }
+    function text(x, y, value, size = 12, fill = "#475467", anchor = "start", weight = 600) {
+      return `<text x="${x}" y="${y}" font-size="${size}" fill="${fill}" text-anchor="${anchor}" font-weight="${weight}" style="font-variant-numeric:tabular-nums">${escapeHtml(value)}</text>`;
+    }
+    function initTooltip() {
+      const tip = document.createElement("div");
+      tip.className = "chart-tooltip";
+      document.body.appendChild(tip);
+      const showTip = event => {
+        const target = event.target.closest?.("[data-tip]");
+        if (!target && event.type === "pointerover") {
+          tip.style.opacity = 0;
+          return;
+        }
+        if (!target) return;
+        tip.innerHTML = target.dataset.tip;
+        const x = Math.min(window.innerWidth - 175, Math.max(175, event.clientX));
+        const y = Math.max(95, event.clientY - 12);
+        tip.style.left = `${x}px`;
+        tip.style.top = `${y}px`;
+        tip.style.opacity = 1;
+      };
+      document.addEventListener("pointerover", showTip);
+      document.addEventListener("pointermove", showTip);
+      document.addEventListener("pointerleave", () => { tip.style.opacity = 0; });
+    }
+    function approxW(s, size) { return String(s).length * size * 0.56; }
+    function trimName(s, max = 28) { return s.length > max ? s.slice(0, max - 1) + "…" : s; }
+    function fmt0(n) { return Math.round(n).toLocaleString("de-CH"); }
+    function fmt1(n) { return Number(n.toFixed(1)).toLocaleString("de-CH"); }
+    function fmtPct(n) { return `${Number(n.toFixed(1)).toLocaleString("de-CH")}%`; }
+    function fmtCHF(n) { return currencyMode + " " + fmt0(n); }
+    function fmtChartCHF(n) {
+      const c = currencyMode + " ";
+      if (n >= 1000000) return c + (n / 1000000).toFixed(1).replace(".0", "") + "M";
+      if (n >= 1000) return c + (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(".0", "") + "k";
+      if (n >= 100) return c + Math.round(n).toLocaleString("de-CH");
+      if (n >= 10) return c + n.toFixed(1).replace(".0", "");
+      return c + n.toFixed(2);
+    }
+    function fmtTokens(n) {
+      if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(".0", "")}M`;
+      if (n >= 1000) return `${Math.round(n / 1000)}k`;
+      return fmt0(n);
+    }
+    function shortCHF(n) {
+      if (n >= 1000) return `${Math.round(n / 100) / 10}k`;
+      return fmt0(n);
+    }
+    function fmtUSD(n) { return "$" + n.toFixed(2); }
+    function fmtCHF2(n) { return "CHF " + n.toLocaleString("de-CH", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    function fmtMoney2(n) { return currencyMode + " " + n.toLocaleString("de-CH", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    function fmtMoney(n) { return currencyMode + " " + fmt0(n); }
+    function tipHtml(title, description, codeLines) {
+      return `<strong>${escapeHtml(title)}</strong><p>${escapeHtml(description)}</p><pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`;
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    function attr(s) { return escapeHtml(s).replace(/\n/g, "&#10;"); }
+    init();
+  </script>
+</body>
+</html>

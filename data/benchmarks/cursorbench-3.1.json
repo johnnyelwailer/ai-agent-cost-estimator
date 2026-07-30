@@ -1,0 +1,44 @@
+{
+  "source": "CursorBench",
+  "version": "3.2",
+  "url": "https://cursor.com/cursorbench",
+  "last_manual_refresh": "2026-07-30",
+  "composer": {
+    "model": "Composer 2.5",
+    "score": 56.1,
+    "cost_usd": 0.44
+  },
+  "selection": {
+    "max_score_gap_for_deepswe_mapping": 2.0
+  },
+  "rows": [
+    {
+      "model": "Opus 4.8 Medium",
+      "score": 56.1,
+      "cost_usd": 2.81,
+      "deepswe_model": "claude-opus-4-8",
+      "deepswe_reasoning_effort": "medium"
+    },
+    {
+      "model": "Sonnet 5 High",
+      "score": 56.9,
+      "cost_usd": 3.19,
+      "deepswe_model": "claude-sonnet-5",
+      "deepswe_reasoning_effort": "high"
+    },
+    {
+      "model": "GLM 5.2 Max",
+      "score": 55.0,
+      "cost_usd": 1.76,
+      "deepswe_model": "glm-5-2",
+      "deepswe_reasoning_effort": "max"
+    },
+    {
+      "model": "GPT-5.6 Terra High",
+      "score": 54.2,
+      "cost_usd": 0.89,
+      "deepswe_model": "gpt-5-6-terra",
+      "deepswe_reasoning_effort": "high"
+    }
+  ]
+}

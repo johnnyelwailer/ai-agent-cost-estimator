@@ -1,0 +1,81 @@
+{
+  "sourceLabel": "AA+CB->DeepSWE est.",
+  "costNote": "Artificial Analysis measured Composer 2.5 standard at $0.07 and 9.3 minutes per task, while CursorBench 3.2 reports Composer 2.5 at $0.44 per task. This report does not copy either dollar figure directly onto DeepSWE. Instead, it uses Composer-to-peer cost ratios within each benchmark and maps those ratios onto overlapping DeepSWE peers: optimistic uses the AA implied median (~$0.10), base averages the AA and CursorBench implied medians (~$0.44), and pessimistic uses the CursorBench near-peer upper bound (~$1.02). Composer minutes remain estimated from DeepSWE-vs-SWE-bench Pro runtime ratios and are not observed DeepSWE v1.1 runs.",
+  "scenarios": {
+    "optimistic": {
+      "cost": 0.105,
+      "minutes": 13.29,
+      "timeMultiplier": 1.43,
+      "costMethod": "AA near-peer median mapped onto DeepSWE peers"
+    },
+    "base": {
+      "cost": 0.437,
+      "minutes": 17.22,
+      "timeMultiplier": 1.85,
+      "costMethod": "average of AA-implied and CursorBench-implied DeepSWE medians"
+    },
+    "pessimistic": {
+      "cost": 1.024,
+      "minutes": 35.18,
+      "timeMultiplier": 3.78,
+      "costMethod": "CursorBench near-peer upper bound mapped onto DeepSWE peers"
+    }
+  },
+  "methodology": {
+    "summary": "Generated from benchmark source files and DeepSWE artifacts. Do not edit by hand; run scripts/recalculate_composer_estimate.py instead.",
+    "aaMedianImpliedCost": 0.105,
+    "cursorbenchMedianImpliedCost": 0.769,
+    "cursorbenchUpperBoundImpliedCost": 1.024,
+    "runtimeRatios": {
+      "optimistic": 1.42862698123992,
+      "base": 1.8513632105724407,
+      "pessimistic": 3.782605983067886,
+      "observed_ratios": [],
+      "note": "Retained from the last DeepSWE/SWE-bench Pro overlap; DeepSWE v1.1 has no comparison rows."
+    },
+    "aaAnchors": [
+      {
+        "benchmark": "Artificial Analysis",
+        "model": "GPT-5.5 XHigh",
+        "benchmark_cost_usd": 4.82,
+        "benchmark_score": 65.0,
+        "deepswe_cost_usd": 7.226236674778761,
+        "implied_deepswe_cost_usd": 0.10494534589927662
+      }
+    ],
+    "cursorbenchAnchors": [
+      {
+        "benchmark": "CursorBench",
+        "model": "Opus 4.8 Medium",
+        "benchmark_cost_usd": 2.81,
+        "benchmark_score": 56.1,
+        "deepswe_cost_usd": 3.4438571028761062,
+        "implied_deepswe_cost_usd": 0.5392516460019525
+      },
+      {
+        "benchmark": "CursorBench",
+        "model": "Sonnet 5 High",
+        "benchmark_cost_usd": 3.19,
+        "benchmark_score": 56.9,
+        "deepswe_cost_usd": 7.425560161197339,
+        "implied_deepswe_cost_usd": 1.0242151946479088
+      },
+      {
+        "benchmark": "CursorBench",
+        "model": "GLM 5.2 Max",
+        "benchmark_cost_usd": 1.76,
+        "benchmark_score": 55.0,
+        "deepswe_cost_usd": 3.9089401533628316,
+        "implied_deepswe_cost_usd": 0.9772350383407079
+      },
+      {
+        "benchmark": "CursorBench",
+        "model": "GPT-5.6 Terra High",
+        "benchmark_cost_usd": 0.89,
+        "benchmark_score": 54.2,
+        "deepswe_cost_usd": 1.1343762765486725,
+        "implied_deepswe_cost_usd": 0.5608152378442874
+      }
+    ]
+  }
+}
